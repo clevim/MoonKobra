@@ -1,0 +1,27 @@
+# data/ is a dual-purpose directory: it ships the curated static
+# orca_filaments.json (COPY'd into the image as /app/static/), but at
+# runtime the SAME path is also the KX_DATA_DIR volume mount target for
+# uploaded G-code, the sqlite job store, and user-imported filament
+# profiles. Without this ignore file, a local dev checkout that has ever
+# run the bridge (or the local-stack Docker Compose) ends up with real
+# print history sitting in data/, and a plain `docker build .` bakes all
+# of it into the image - one such build was 1.4GB, ~460MB of which was
+# just gcode files from local testing.
+data/gcodes/
+data/moonkobra.db
+data/*.db
+data/*.key
+data/orca_filaments.user.json
+data/job_logs/
+data/pricing.json
+
+# Never ship real credentials/secrets from a dev checkout.
+config/config.ini
+.env
+
+# VCS/tooling noise that would otherwise bloat the build context.
+.git/
+__pycache__/
+*.pyc
+.pytest_cache/
+tests/

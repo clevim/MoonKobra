@@ -1,0 +1,29 @@
+.env
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+releases/
+
+!moonkobra.spec
+
+# Dados de execução e credenciais da impressora — nunca commitar
+config/config.ini
+config/*.ini
+!config/config.ini.example
+data/*
+
+!data/orca_filaments.json
+.runner-token
+
+# Arquivos só de desenvolvimento — fora do repositório público
+CLAUDE.md
+.claude/
+agents.md
+.impeccable/
+release.sh
+
+# venv local
+.venv/
+.pytest_cache/
