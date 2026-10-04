@@ -113,8 +113,10 @@ There is no published image yet, so Docker builds it from this folder:
 ```bash
 git clone https://github.com/clevim/MoonKobra.git
 cd MoonKobra
-./start.sh            # or: docker compose up -d --build
+./start.sh
 ```
+Before that, put the two [Anycubic certificates](#anycubic-certificates) in
+the folder. `docker compose up -d --build` works too.
 
 **3. Open the dashboard** at `http://HOST-IP:7125`.
 The first login is `kx` / `kx123`, and you will be asked to choose a new
@@ -132,10 +134,20 @@ API key field.
 > More than one printer? Add it the same way: each one gets its own port
 > (7125, 7126, …).
 
+### Anycubic certificates
+
+The printer only accepts MQTT connections signed with the TLS certificate
+from Anycubic Slicer Next, so MoonKobra needs two files: `anycubic_slicer.crt`
+and `anycubic_slicer.key`. They belong to Anycubic and are **not** distributed
+here. They are available in the KX-Bridge project, or you can extract them
+from your own Anycubic Slicer Next installation (they are embedded in
+`cloud_mqtt.dll`). Put both in the MoonKobra folder, next to
+`kobrax_moonraker_bridge.py` (or next to the binary), before starting.
+
 <details>
 <summary><b>Other ways to run it</b></summary>
 
-**Python directly**
+**Python directly** (with the [certificates](#anycubic-certificates) in place)
 ```bash
 pip install -r requirements.txt
 python kobrax_moonraker_bridge.py
@@ -274,9 +286,9 @@ its contributors; the Anycubic error-code table comes from
 [stribor/anycubic_kobrax](https://github.com/stribor/anycubic_kobrax) (MIT).
 
 The MQTT protocol support is the result of independent reverse engineering for
-interoperability. The Anycubic TLS certificates in the repository are **not**
-covered by the GPL and are included only to authenticate against printers the
-user already owns. Details in [NOTICE.md](NOTICE.md).
+interoperability. The Anycubic TLS certificates are **not** part of this
+repository nor covered by the GPL; each user supplies them, only to
+authenticate against printers the user already owns. Details in [NOTICE.md](NOTICE.md).
 
 MoonKobra is independent and not affiliated with Anycubic.
 
