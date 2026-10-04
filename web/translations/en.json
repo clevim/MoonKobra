@@ -364,6 +364,7 @@
   "store_web_verify_confirm": "Confirm",
   "store_web_verify_msg": "Please verify this file was made for Anycubic Kobra X.",
   "store_web_verify_title": "Verify file",
+  "update_available": "New version available: ",
   "update_restarting": "Restarting...",
   "login_user": "User",
   "login_password": "Password",

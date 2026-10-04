@@ -7,7 +7,7 @@ fica em `filament_notes` dentro do JSON.
 
 | Marca | Linhas | Cores |
 |---|---|---|
-| 3DFila | PLA, PLA Matte, PLA Silk (+ Duo, Tricolor, Rainbow), PLA Magic, PLA EasyFill, PLA Wood, PLA GF, PETG XT, PETG High Speed, TPU Flex, ABS Premium | 132 cores, um perfil por cor |
+| 3DFila | PLA, PLA Matte, PLA Silk (+ Duo, Tricolor, Rainbow), PLA Magic, PLA EasyFill, PLA Wood, PLA GF, PLA Mármore, PLA Fosforescente, PLA HT, PLA ABS-Like, PLA CF, PETG XT, PETG High Speed, TPU Flex, ABS Premium, ABS MG94 | 171 cores, um perfil por cor |
 | GTMax3D | PLA, PLA Speed+, PETG, ABS Premium | só o perfil da linha |
 | 3D Lab | PLA, PETG | só o perfil da linha |
 | F3D | PLA Premium | só o perfil da linha |
@@ -34,9 +34,14 @@ Wood Natural e numa das cores do PLA Matte Rainbow).
 Filamentos Duo/Tricolor/Rainbow usam a primeira cor como cor do perfil; as outras
 ficam listadas em `filament_notes`.
 
-**Linhas fora dos perfis:** a 3DFila não publica ficha técnica de PLA HT, PLA
-ABS-Like, PLA CF, HIPS, Antichama FRP, Condutivo e Antiviral, então essas não
-entraram.
+**Linhas com temperatura estimada:** PLA Mármore, PLA Fosforescente, PLA HT,
+PLA ABS-Like, PLA CF e ABS MG94 entraram, mas a 3DFila não publica a ficha
+técnica delas — usam os defaults do material-base (PLA/ABS) e trazem a nota
+"calibrar" em `filament_notes`. Ajuste bico/mesa na impressora. PLA CF é
+abrasivo: use bico endurecido.
+
+**Linhas fora dos perfis:** HIPS, Antichama FRP, Condutivo e Antiviral — sem
+ficha técnica e fora do escopo PLA/PETG/ABS/TPU.
 
 ## Preço (3DFila)
 

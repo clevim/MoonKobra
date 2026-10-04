@@ -1515,6 +1515,15 @@ function openSettings(){
   var ls=document.getElementById('s-lang-select');
   if(ls)ls.value=(localStorage.getItem('lang')||document.documentElement.lang||'de');
   document.getElementById('s-version-label').textContent='v'+('__VERSION__'||'?');
+  // Checks GitHub for a newer release (cached by the backend); shows a link when there is one.
+  fetch('/api/update').then(function(r){return r.json();}).then(function(u){
+    var el=document.getElementById('s-update');if(!el)return;
+    if(u&&u.available){
+      el.textContent=tr('update_available','New version available: ')+u.latest;
+      el.href=u.url||'https://github.com/clevim/MoonKobra/releases';
+      el.style.display='block';
+    }else{el.style.display='none';}
+  }).catch(function(){});
   // Loads the list of custom profiles (Issue #41)
   refreshUserProfileList();
   // Vendor visibility filter (Issue #41 option A)

@@ -1382,6 +1382,8 @@ class KobraXBridge:
         self._camera_user_stopped: bool = False  # user stopped the camera manually during a print
         self._light_desired = None  # last explicit UI light state (None = user never set it)
         self._camera_start_ts: float = 0.0  # time of our last video/startCapture
+        self._update_info = {"current": "", "latest": None, "url": "", "available": False}
+        self._update_checked_ts: float = 0.0  # last GitHub release check
         self.camera_cache: CameraCache = CameraCache()
 
         self._thumbnail_b64: str = ""
@@ -2689,6 +2691,44 @@ class KobraXBridge:
             self._state["light_on"] = False
         except Exception as e:
             log.warning(f"Could not restore the light to off after camera start: {e}")
+
+    @staticmethod
+    def _cmp_ver(a: str, b: str) -> int:
+        """-1/0/1 comparing dotted versions, ignoring a leading 'v' and any -suffix."""
+        def parts(x):
+            x = x.lstrip("vV").split("-")[0]
+            return [int(re.match(r"\d+", seg).group()) if re.match(r"\d+", seg) else 0
+                    for seg in x.split(".")]
+        pa, pb = parts(a), parts(b)
+        n = max(len(pa), len(pb))
+        pa += [0] * (n - len(pa)); pb += [0] * (n - len(pb))
+        return (pa > pb) - (pa < pb)
+
+    def _refresh_update_info(self) -> None:
+        """Fetches the latest GitHub release of clevim/MoonKobra and compares it with VERSION."""
+        import urllib.request
+        try:
+            req = urllib.request.Request(
+                "https://api.github.com/repos/clevim/MoonKobra/releases/latest",
+                headers={"User-Agent": "MoonKobra", "Accept": "application/vnd.github+json"})
+            data = json.loads(urllib.request.urlopen(req, timeout=10).read().decode("utf-8"))
+            latest = (data.get("tag_name") or "").strip()
+            cur = self._read_version()
+            if latest:
+                self._update_info = {
+                    "current": cur, "latest": latest,
+                    "url": data.get("html_url") or "https://github.com/clevim/MoonKobra/releases",
+                    "available": self._cmp_ver(latest, cur) > 0,
+                }
+        except Exception as e:
+            log.info(f"Update check failed: {e}")
+
+    async def handle_api_update(self, request):
+        """GET /api/update - cached GitHub release check (refreshes in the background at most every 6 h)."""
+        if time.time() - self._update_checked_ts > 21600:
+            self._update_checked_ts = time.time()
+            threading.Thread(target=self._refresh_update_info, daemon=True, name="update-check").start()
+        return web.json_response(self._update_info)
 
     # (nozzle, bed) in °C per material, for OrcaSlicer's lanes and Happy Hare's gates.
     # ponytail: family defaults; the exact values live in the chosen Orca profile.
@@ -7123,6 +7163,7 @@ def build_app(bridge: KobraXBridge) -> web.Application:
     r.add_post("/api/connect",             bridge.handle_api_connect)
     r.add_post("/api/disconnect",          bridge.handle_api_disconnect)
     r.add_post("/api/restart",             bridge.handle_api_restart)
+    r.add_get("/api/update",               bridge.handle_api_update)
     r.add_post("/api/speed",               bridge.handle_api_speed)
     r.add_post("/api/ams/feed",            bridge.handle_api_ams_feed)
     r.add_post("/api/ams/set_slot",        bridge.handle_api_ams_set_slot)
