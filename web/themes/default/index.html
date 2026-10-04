@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark" data-assets="__UI_ASSETS_VER__">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#171A1C">
+<title>MoonKobra</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/kx/ui/lib/icon/favicon-32.png?v=__UI_ASSETS_VER__">
+<link rel="icon" type="image/png" sizes="64x64" href="/kx/ui/lib/icon/favicon-64.png?v=__UI_ASSETS_VER__">
+<link rel="apple-touch-icon" href="/kx/ui/lib/icon/icon-180.png?v=__UI_ASSETS_VER__">
+<link rel="stylesheet" href="/kx/ui/lib/icons.css">
+<link rel="stylesheet" href="/kx/ui/style.css">
+<link rel="stylesheet" href="/kx/ui/lib/pickr-nano.min.css">
+<script src="/kx/ui/lib/pickr.min.js"></script>
+</head>
+<body>
+<!--
+THESIS: A impressão é uma missão acompanhada de um console: a própria peça é o progresso, sólida até a camada atual e holograma de projeção acima; todas as fases à vista, só a atual acesa. Recusa a grade de widgets iguais.
+OWN-WORLD: console ardósia #171A1C, tinta papel #E7E5DE, laranja internacional #FF6B1A como única cor de ação; hairlines de 1px; Archivo (largo nos rótulos de placa, condensado nas leituras); símbolos de Bečvář por slot do ACE; Moko em cartão de manual impresso; modos Dia / Noite / Madrugada.
+STORY: num relance: o que imprime, quanto falta, se está tudo nominal; depois pausar, pular objetos ou parar sem medo de toque acidental; ajustar temperatura, velocidade, ventoinha, luz e ACE sem sair da tela.
+FIRST VIEWPORT: peça 3D à esquerda da missão, nome, %, término e leituras; comandos; trajetória; boletim do Moko. À direita, câmera com luz e ACE com secador.
+FORM: direção fixada pelo usuário (Controle de Missão + astros), acima do sorteio; seed 0ff47ef0; reforços: painel de voo noturno (tendência em cada leitura), tubo de cátodo (todas as fases presentes, só a atual acesa).
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->
+
+<div id="conn-error-banner" class="banner" style="display:none"></div>
+<div id="pause-msg-banner" class="banner" style="display:none"></div>
+<div id="file-ready-banner" class="banner" style="display:none">
+  <span data-icon="file-code"><span id="file-ready-name"></span></span>
+  <button class="btn btn-sm btn-accent" id="file-ready-btn" data-icon="play" onclick="startReadyFile()"></button>
+  <button class="btn btn-sm" id="file-slots-btn" data-icon="sliders-horizontal" onclick="startReadyFileWithSlots()"></button>
+  <button class="btn btn-sm" id="file-cancel-btn" data-icon="x" onclick="cancelReadyFile()"></button>
+</div>
+
+<!-- Upload em andamento (navegador ou OrcaSlicer): etapa + régua de progresso -->
+<div id="upload-strip" class="upload-strip" style="display:none" role="status" aria-live="polite">
+  <span class="upload-strip-icon" id="upload-strip-icon" data-icon="upload"></span>
+  <div class="upload-strip-body">
+    <div class="upload-strip-top"><b id="upload-strip-name"></b><span id="upload-strip-phase" class="muted"></span><span id="upload-strip-pct" class="upload-strip-pct"></span></div>
+    <div class="progress-bar"><div class="progress-fill" id="upload-strip-bar" style="width:0%"></div></div>
+  </div>
+</div>
+
+<header class="top">
+  <div class="logo"><img src="/kx/ui/lib/icon/favicon-64.png?v=__UI_ASSETS_VER__" alt="" width="30" height="30"><b>MoonKobra</b></div>
+  <div id="printer-dropdown-wrap" style="display:none;position:relative">
+    <button id="printer-dropdown-btn" onclick="togglePrinterDropdown()">
+      <span id="h-pname">Anycubic Kobra X</span><i data-icon="chevron-down"></i>
+    </button>
+    <div id="printer-dropdown-menu"></div>
+  </div>
+  <div id="h-pname-single" class="hname">Anycubic Kobra X</div>
+  <div class="hbadge" id="h-badge"><span class="dot"></span><span id="h-state">Standby</span></div>
+  <div class="spacer"></div>
+  <button id="h-power-btn" class="h-power-btn" data-icon="power" style="display:none" onclick="toggleHeaderPower()" title="Tomada"><span id="h-power-lbl"></span></button>
+  <button class="conn-btn disconnected" id="conn-btn" data-icon="plug" onclick="toggleConnection()">Conectar</button>
+  <div class="modes" role="group" aria-label="Modo de exibição">
+    <button data-theme-mode="light" data-icon="sun" onclick="setTheme('light')" aria-pressed="false"><span id="lbl-mode-light">Dia</span></button>
+    <button data-theme-mode="dark" data-icon="moon" onclick="setTheme('dark')" aria-pressed="true"><span id="lbl-mode-dark">Noite</span></button>
+    <button data-theme-mode="night" data-icon="eye" onclick="setTheme('night')" aria-pressed="false"><span id="lbl-mode-night">Madrugada</span></button>
+  </div>
+  <button class="theme-btn" data-icon="log-out" onclick="logout()" id="logout-btn" style="display:none" title="Sair"></button>
+</header>
+
+<!-- ═══ DIÁLOGO DE EDIÇÃO DE SLOT DO AMS ═══ -->
+<div class="modal-overlay" id="slot-edit-modal" onclick="if(event.target===this)closeSlotEdit()">
+  <div class="modal-box" style="max-width:380px">
+    <div class="modal-header">
+      <span class="modal-title" id="slot-edit-title"></span>
+      <button class="modal-close" data-icon="x" onclick="closeSlotEdit()" aria-label="Fechar"></button>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:16px">
+      <div id="slot-edit-preview" class="slot-circle" style="margin:4px 0 0;flex:none"></div>
+      <div style="flex:1;min-width:0">
+        <div class="field-label" id="lbl-slot-color"></div>
+        <div id="slot-pickr-anchor"></div>
+        <input type="hidden" id="slot-edit-color">
+      </div>
+    </div>
+    <div id="slot-color-swatches" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    <div id="slot-copy-row" style="display:none">
+      <select id="slot-copy-select" style="width:100%" onchange="slotCopyColor(this)">
+        <option value="" id="lbl-slot-copy-from">Copiar cor de outro slot…</option>
+      </select>
+    </div>
+    <div>
+      <div class="field-label" id="lbl-slot-material"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px" id="slot-mat-btns"></div>
+      <input type="text" id="slot-edit-mat" oninput="highlightMatBtn(this.value)" style="margin-top:8px">
+    </div>
+    <div>
+      <div class="field-label" id="lbl-slot-profile"></div>
+      <select id="slot-edit-profile" onchange="onSlotProfileChange()" style="width:100%">
+        <option value="" id="slot-profile-default-opt"></option>
+      </select>
+      <div id="slot-profile-palette" style="display:none;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
+      <div class="hint" style="margin-top:6px" id="slot-profile-hint"></div>
+      <a href="#" onclick="event.preventDefault();openProfileImport()" style="display:inline-flex;margin-top:8px;font-size:13px;font-weight:600" data-icon="upload"><span id="lbl-slot-profile-import">Importar perfis próprios…</span></a>
+    </div>
+    <div class="modal-actions" style="justify-content:stretch">
+      <button class="btn" id="btn-slot-edit-feed" data-icon="arrow-down-to-line" style="flex:1" onclick="slotEditFeed()"></button>
+      <button class="btn btn-accent" id="btn-slot-edit-save" data-icon="check" style="flex:1" onclick="saveSlotEdit()"></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ IMPORTAÇÃO DE PERFIS DO ORCA ═══ -->
+<div class="modal-overlay" id="profile-import-modal" onclick="if(event.target===this)closeProfileImport()">
+  <div class="modal-box" style="max-width:500px">
+    <div class="modal-header">
+      <span class="modal-title" id="profile-import-title">Importar perfis do OrcaSlicer</span>
+      <button class="modal-close" data-icon="x" onclick="closeProfileImport()" aria-label="Fechar"></button>
+    </div>
+    <div class="hint" id="profile-import-help">
+      Envie um <b>ZIP</b> da pasta de filamentos do OrcaSlicer ou arquivos <b>.json</b>.<br>
+      No OrcaSlicer: <i>Ajuda → Mostrar pasta de configuração → user/&lt;id&gt;/filament/</i>
+    </div>
+    <div id="profile-import-drop" class="dropzone" style="border:2px dashed var(--edge-2);border-radius:var(--r);padding:26px;text-align:center;cursor:pointer"
+      ondragover="event.preventDefault();this.style.borderColor='var(--tape)'"
+      ondragleave="this.style.borderColor='var(--edge-2)'"
+      ondrop="event.preventDefault();this.style.borderColor='var(--edge-2)';doProfileImportUpload(event.dataTransfer.files)"
+      onclick="document.getElementById('profile-import-file').click()">
+      <div data-icon="upload" style="font-size:28px;color:var(--ink-2);margin-bottom:6px"></div>
+      <div class="hint" id="profile-import-dropmsg">Arraste aqui ou clique</div>
+      <input type="file" id="profile-import-file" accept=".zip,.json" multiple style="display:none" onchange="doProfileImportUpload(this.files);this.value=''">
+    </div>
+    <div id="profile-import-status" style="font-size:13px;min-height:18px"></div>
+    <div class="field-label" id="profile-import-list-label">Importados</div>
+    <div id="profile-import-list" style="max-height:240px;overflow-y:auto;font-size:13px"></div>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="sidebar">
+    <button class="nav-btn active" onclick="showPanel('dashboard')" id="nb-dashboard">
+      <span class="nav-icon" data-icon="clock"></span><span class="nav-text">Agora</span></button>
+    <button class="nav-btn" onclick="showPanel('printers');loadPrinterTab()" id="nb-printers">
+      <span class="nav-icon" data-icon="printer"></span><span class="nav-text">Impressoras</span></button>
+    <button class="nav-btn" onclick="showPanel('store');loadStore()" id="nb-store">
+      <span class="nav-icon" data-icon="folder-open"></span><span class="nav-text">Arquivos</span></button>
+    <button class="nav-btn" onclick="showPanel('pricing');prOpen()" id="nb-pricing">
+      <span class="nav-icon" data-icon="calculator"></span><span class="nav-text" data-t="nav_pricing">Orçamento</span><span class="dymo yellow beta" title="Em desenvolvimento">Beta</span></button>
+    <button class="nav-btn" onclick="showPanel('console');clearLogBadge()" id="nb-console">
+      <span class="nav-icon" data-icon="scroll-text"></span><span class="nav-text">Registro</span><span id="log-badge" class="nav-count" style="display:none"></span></button>
+    <button class="nav-btn" onclick="showPanel('settings')" id="nb-settings">
+      <span class="nav-icon" data-icon="settings"></span><span class="nav-text" id="nav-settings">Ajustes</span></button>
+    <div class="rail-foot">MoonKobra <span id="h-version"></span><br>GPLv3</div>
+  </nav>
+
+  <main>
+    <!-- ═══ AGORA ═══ -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="agora">
+        <div class="col">
+          <!-- Missão: a peça como progresso -->
+          <section class="card mission-card" id="card-progress">
+            <div class="mission">
+              <div class="preview-wrap" id="preview-wrap">
+                <canvas id="preview-canvas" aria-label="Peça em 3D"></canvas>
+                <div class="preview-empty" id="preview-empty" data-icon="box"><span id="preview-empty-txt">Nenhuma peça carregada</span></div>
+                <div class="preview-legend"><span><i class="lg-done"></i><span id="lbl-lg-done">impresso</span></span><span><i class="lg-now"></i><span id="lbl-lg-now">camada atual</span></span><span><i class="lg-holo"></i><span id="lbl-lg-holo">a imprimir</span></span></div>
+                <div class="preview-meta" id="preview-meta"></div>
+                <div class="seg preview-mode" role="group" aria-label="Visualização da peça">
+                  <button data-preview-mode="progress" onclick="kxPreview.setFull(false)" aria-pressed="true"><span id="lbl-prev-progress">Progresso</span></button>
+                  <button data-preview-mode="full" onclick="kxPreview.setFull(true)" aria-pressed="false"><span id="lbl-prev-full">Peça inteira</span></button>
+                </div>
+                <button class="icon-btn preview-reset" data-icon="rotate-ccw" onclick="kxPreview&&kxPreview.resetView()" title="Recentralizar"></button>
+              </div>
+              <div class="mission-body">
+                <div class="job-title">
+                  <img id="d-thumbnail" alt="">
+                  <h1 class="fname" id="d-fname" title="">–</h1>
+                </div>
+                <div class="job-top">
+                  <div class="pct-big"><span id="d-pct">0</span><small>%</small></div>
+                  <div class="eta"><span id="d-eta" class="eta-clock"></span><span class="eta-remain"><span id="d-lbl-remain"></span> <span id="d-remain">–</span></span></div>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" id="d-pbar" style="width:0%"></div></div>
+                <div class="reads">
+                  <div><span class="plate" id="d-lbl-layers"></span><span class="num" id="d-layers">–</span></div>
+                  <div><span class="plate" id="d-lbl-zpos">Z</span><span class="num" id="d-zpos">–</span></div>
+                  <div><span class="plate" id="d-lbl-elapsed"></span><span class="num" id="d-elapsed">–</span></div>
+                  <div id="d-slicer-row" style="display:none"><span class="plate" id="d-slicer-label"></span><span class="num" id="d-slicer-time">–</span></div>
+                </div>
+                <div class="ctrl-btns" id="d-ctrl-btns" style="display:none">
+                  <button class="btn btn-accent btn-pause" id="d-btn-pause" data-icon="pause" onclick="togglePauseResume()">Pausar</button>
+                  <button class="btn btn-skip" id="d-btn-skip" data-icon="scissors" onclick="openSkipDialog()" style="display:none"><span id="d-btn-skip-label">Objetos</span></button>
+                  <button class="btn btn-cancel btn-hold" id="d-btn-cancel" data-icon="square"><i class="hold-fill"></i><span id="d-btn-cancel-lbl">Segure para parar</span></button>
+                </div>
+                <div class="ctrl-btns" id="d-idle-btns" style="display:none">
+                  <button class="btn btn-accent" id="d-idle-print" data-icon="play" onclick="startIdleFile()"><span id="d-idle-print-lbl">Imprimir</span></button>
+                  <button class="btn" id="d-idle-slots" data-icon="sliders-horizontal" onclick="startIdleFileWithSlots()"><span id="d-idle-slots-lbl">Atribuir slots</span></button>
+                  <button class="btn btn-ghost" id="d-idle-clear" data-icon="x" onclick="clearIdleFile()"><span id="d-idle-clear-lbl">Limpar</span></button>
+                </div>
+              </div>
+            </div>
+            <div class="traj" id="d-traj-wrap" style="display:none">
+              <span class="plate" id="lbl-traj">Trajetória</span>
+              <ol>
+                <span class="traj-run" id="d-traj-run"></span>
+                <li id="d-traj-prep"><i></i><span id="lbl-traj-prep">Verificação</span><small></small></li>
+                <li id="d-traj-heat"><i></i><span id="lbl-traj-heat">Aquecimento</span><small></small></li>
+                <li id="d-traj-level"><i></i><span id="lbl-traj-level">Nivelamento</span><small></small></li>
+                <li id="d-traj-print"><i></i><span id="lbl-traj-print">Impressão</span><small></small></li>
+                <li id="d-traj-done"><i></i><span id="lbl-traj-done">Concluída</span><small></small></li>
+              </ol>
+            </div>
+            <div class="bulletin">
+              <div class="moko-card" id="moko-img" role="img" aria-label="Moko" style="--moko-l:url(/kx/ui/lib/moko/ok-l.png?v=__UI_ASSETS_VER__);--moko-a:url(/kx/ui/lib/moko/ok-a.png?v=__UI_ASSETS_VER__)"><i class="moko-l"></i><i class="moko-a"></i></div>
+              <div>
+                <span class="plate" id="lbl-moko">Boletim do Moko</span>
+                <p id="moko-txt"></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Temperaturas -->
+          <section class="card" id="card-temps">
+            <div class="card-head"><div class="card-title" data-icon="thermometer"><span id="d-card-temps">Temperaturas</span></div></div>
+            <div class="temp-card-inner">
+              <div class="temp-block">
+                <div class="temp-label" id="d-lbl-nozzle">Bico</div>
+                <div class="temp-row"><div class="temp-val" id="d-nt">–</div><div class="temp-target">/ <span id="d-nt-t">0</span> °C</div></div>
+                <div class="trend" id="d-nt-trend"></div>
+                <div class="progress-bar heat"><div class="progress-fill" id="d-ntbar" style="width:0%"></div></div>
+                <div class="temp-edit">
+                  <input type="number" class="temp-input" id="p-nozzle-inp" placeholder="°C" min="0" max="300" aria-label="Alvo do bico">
+                  <button class="btn btn-sm btn-accent" onclick="setNozzle()"><span class="lbl-set">Definir</span></button>
+                  <button class="btn btn-sm" onclick="document.getElementById('p-nozzle-inp').value=0;setNozzle()"><span class="lbl-off">Desligar</span></button>
+                </div>
+              </div>
+              <div class="temp-block">
+                <div class="temp-label" id="d-lbl-bed">Mesa</div>
+                <div class="temp-row"><div class="temp-val" id="d-bt">–</div><div class="temp-target">/ <span id="d-bt-t">0</span> °C</div></div>
+                <div class="trend" id="d-bt-trend"></div>
+                <div class="progress-bar bed"><div class="progress-fill" id="d-btbar" style="width:0%"></div></div>
+                <div class="temp-edit">
+                  <input type="number" class="temp-input" id="p-bed-inp" placeholder="°C" min="0" max="120" aria-label="Alvo da mesa">
+                  <button class="btn btn-sm btn-accent" onclick="setBed()"><span class="lbl-set">Definir</span></button>
+                  <button class="btn btn-sm" onclick="document.getElementById('p-bed-inp').value=0;setBed()"><span class="lbl-off">Desligar</span></button>
+                </div>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <div class="chart-keys"><span><i class="k-heat"></i><span class="lbl-k-nozzle">Bico</span></span><span><i class="k-bed"></i><span class="lbl-k-bed">Mesa</span></span><span><i class="k-target"></i><span id="lbl-k-target">Alvo</span></span><span class="chart-label" id="d-chart-label">Histórico</span></div>
+              <canvas id="d-chart" width="800" height="120"></canvas>
+            </div>
+          </section>
+
+          <!-- Velocidade + ventoinha -->
+          <section class="card pair" id="card-speed">
+            <div>
+              <div class="card-title" data-icon="gauge"><span id="d-card-speed">Velocidade</span></div>
+              <div class="spd-group">
+                <button class="spd-btn" id="d-spd-1" onclick="setSpeed(1)"><span class="spd-icon" data-icon="turtle"></span><span id="d-spd-lbl-1">Silencioso</span></button>
+                <button class="spd-btn spd-active" id="d-spd-2" onclick="setSpeed(2)"><span class="spd-icon" data-icon="gauge"></span><span id="d-spd-lbl-2">Normal</span></button>
+                <button class="spd-btn" id="d-spd-3" onclick="setSpeed(3)"><span class="spd-icon" data-icon="rabbit"></span><span id="d-spd-lbl-3">Sport</span></button>
+              </div>
+              <div class="spd-bar"><div class="spd-bar-fill" id="d-spd-bar" style="width:50%"></div></div>
+            </div>
+            <div id="card-fan">
+              <div class="card-title" data-icon="fan"><span id="d-card-lightfan">Ventoinha</span></div>
+              <div class="slider-row">
+                <input type="range" class="slider" min="0" max="100" value="0" id="d-fan" oninput="document.getElementById('d-fan-val').textContent=this.value" onchange="setFan()" aria-label="Ventoinha">
+                <span class="slider-val" id="d-fan-val">0</span>
+              </div>
+              <div class="seg fan-quick">
+                <button onclick="quickFan(0)"><span class="lbl-off">Off</span></button>
+                <button onclick="quickFan(25)">25</button>
+                <button onclick="quickFan(50)">50</button>
+                <button onclick="quickFan(75)">75</button>
+                <button onclick="quickFan(100)">100</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Movimento -->
+          <section class="card motion-card" id="card-motion">
+            <details id="motion-details">
+              <summary><span class="card-title" data-icon="move"><span id="ptitle-motion-xy">Eixos</span></span><i data-icon="chevron-right" class="chev"></i></summary>
+              <div class="motion-row">
+                <div class="motion-col">
+                  <div class="joypad">
+                    <div></div><button class="joy" data-icon="arrow-up" onclick="move(1,1,getStep())" title="Y+"></button><div></div>
+                    <button class="joy" data-icon="arrow-left" onclick="move(0,-1,getStep())" title="X−"></button>
+                    <button class="joy lbl-home-xy" data-icon="house" onclick="homeXY()" title="Home XY" aria-label="Home XY"></button>
+                    <button class="joy" data-icon="arrow-right" onclick="move(0,1,getStep())" title="X+"></button>
+                    <div></div><button class="joy" data-icon="arrow-down" onclick="move(1,-1,getStep())" title="Y−"></button><div></div>
+                  </div>
+                  <span class="joy-label">X · Y</span>
+                </div>
+                <div class="motion-col">
+                  <div class="joypad z">
+                    <button class="joy" data-icon="arrow-up-to-line" onclick="move(2,1,getStep())" title="Z+"></button>
+                    <button class="joy lbl-home-z" data-icon="house" onclick="homeZ()" title="Home Z" aria-label="Home Z"></button>
+                    <button class="joy" data-icon="arrow-down-from-line" onclick="move(2,-1,getStep())" title="Z−"></button>
+                  </div>
+                  <span class="joy-label">Z</span>
+                </div>
+                <div class="motion-side">
+                  <div class="step-btns">
+                    <button class="step-btn" onclick="setStep(this,0.1)">0.1</button>
+                    <button class="step-btn active" onclick="setStep(this,1)">1</button>
+                    <button class="step-btn" onclick="setStep(this,5)">5</button>
+                    <button class="step-btn" onclick="setStep(this,10)">10</button>
+                  </div>
+                  <input id="step-custom" type="number" min="0.1" max="260" step="0.1" placeholder="mm" oninput="setStepCustom(this)" aria-label="Passo (mm)">
+                  <div class="motion-foot">
+                    <button class="btn btn-sm" data-icon="house" onclick="homeAll()"><span class="lbl-home-all">Home geral</span></button>
+                    <button class="btn btn-sm" data-icon="power" onclick="disableMotors()"><span class="lbl-disable-motors">Soltar motores</span></button>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </section>
+        </div>
+
+        <div class="col">
+          <!-- Câmera + luz -->
+          <section class="card cam-card" id="card-camera">
+            <div class="card-head">
+              <div class="card-title" data-icon="camera"><span id="d-card-cam">Câmera</span></div>
+              <label class="switch"><input type="checkbox" id="d-light-toggle" onchange="setLight()"><span id="d-lbl-light">Luz</span></label>
+            </div>
+            <div class="cam-wrap" id="cam-wrap">
+              <div class="cam-placeholder" id="cam-placeholder" data-icon="camera"><span id="cam-placeholder-txt">Câmera desligada</span></div>
+              <div class="cam-spinner" id="cam-spinner"></div>
+              <img id="cam-img" draggable="false" style="display:none" alt="Câmera">
+              <div class="cam-overlay" id="cam-overlay" style="display:none"><div id="cam-fname"></div></div>
+              <i class="reticle" aria-hidden="true"></i>
+            </div>
+            <div class="cam-actions">
+              <button class="btn btn-sm cam-toggle" id="cam-toggle-btn" data-icon="play" onclick="toggleCam()">Câmera</button>
+              <button class="btn btn-sm cam-toggle" id="cam-reset-btn" data-icon="refresh-cw" onclick="resetCamera()" style="display:none" title="Reconectar o stream da câmera"></button>
+            </div>
+          </section>
+
+          <!-- Filamento / ACE -->
+          <section class="card ace-card" id="d-ams-card">
+            <div class="card-head"><div class="card-title" data-icon="disc-3"><span id="d-card-ams">Filamento</span></div></div>
+            <div class="ams-slots" id="ams-slots">
+              <div class="empty-state" id="ams-no-data">Nenhum dado do ACE recebido</div>
+            </div>
+            <div id="d-ace-dry-wrap" style="display:none"><div id="d-ace-dry-grid"></div></div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ IMPRESSORAS ═══ -->
+    <div class="panel" id="panel-printers">
+      <div class="page-head">
+        <h1 id="printers-panel-title">Impressoras</h1>
+        <div class="actions">
+          <button class="btn btn-accent btn-sm" data-icon="plus" onclick="openAddPrinterDialog()"><span id="add-printer-btn-label">Adicionar impressora</span></button>
+          <button class="icon-btn" data-icon="refresh-cw" onclick="loadPrinterTab()" title="Atualizar"></button>
+        </div>
+      </div>
+      <div id="printers-grid"></div>
+    </div>
+
+    <!-- ═══ ARQUIVOS ═══ -->
+    <div class="panel" id="panel-store">
+      <div class="page-head">
+        <h1 id="store-panel-title">Arquivos</h1>
+        <div class="actions">
+          <button id="store-refresh-btn" class="btn btn-sm btn-ghost" data-icon="refresh-cw" onclick="loadStore()">Atualizar</button>
+        </div>
+      </div>
+      <div class="browser-subtabs">
+        <button class="browser-tab active" id="btab-uploaded" onclick="showBrowserTab('uploaded')"><span id="btab-lbl-uploaded">Enviados</span></button>
+        <button class="browser-tab" id="btab-printer" onclick="showBrowserTab('printer')"><span id="btab-lbl-printer">Na impressora</span></button>
+      </div>
+
+      <div id="browser-group-uploaded" class="browser-group active">
+        <div class="toolbar">
+          <div class="search-field" data-icon="search"><input id="store-search" type="text" placeholder="Buscar…" oninput="renderStore()"></div>
+          <select id="store-filter" onchange="renderStore()">
+            <option value="all" id="sf-all">Todos</option>
+            <option value="completed" id="sf-ok">Concluídos</option>
+            <option value="failed" id="sf-err">Com falha</option>
+            <option value="never" id="sf-new">Novos</option>
+          </select>
+          <select id="store-sort" onchange="renderStore()">
+            <option value="date_desc" id="ss-date">Data</option>
+            <option value="name_asc" id="ss-name">Nome (A–Z)</option>
+            <option value="duration_asc" id="ss-dur">Duração</option>
+          </select>
+        </div>
+        <div id="store-upload-zone" onclick="document.getElementById('store-upload-input').click()"
+          ondragover="event.preventDefault();this.classList.add('drag-over')"
+          ondragleave="this.classList.remove('drag-over')"
+          ondrop="event.preventDefault();this.classList.remove('drag-over');uploadGcode(event.dataTransfer.files[0])">
+          <input type="file" id="store-upload-input" accept=".gcode,.bgcode" style="display:none" onchange="uploadGcode(this.files[0]);this.value=''">
+          <span id="store-upload-icon" data-icon="upload"></span>
+          <span id="store-upload-label"><span id="store-upload-label-prefix">Arraste o G-code aqui ou </span><u id="store-upload-label-browse">procure</u></span>
+          <span id="store-upload-status" style="display:none"></span>
+        </div>
+        <div id="store-empty" class="empty-state" style="display:none"></div>
+        <div id="store-select-bar" class="select-bar">
+          <label><input type="checkbox" id="store-select-all" onchange="storeToggleSelectAll(this.checked)"><span id="store-lbl-select-all">Selecionar todos</span></label>
+          <span id="store-selected-count" class="muted" style="font-size:14px"></span>
+          <button id="store-delete-selected-btn" class="btn btn-sm btn-danger" data-icon="trash-2" disabled onclick="storeDeleteSelected()"><span id="store-lbl-delete-selected">Apagar seleção</span></button>
+          <button class="btn btn-sm btn-ghost" onclick="storeExitSelectMode()"><span id="store-lbl-exit-select">Cancelar</span></button>
+        </div>
+        <div id="store-grid" class="card-grid"></div>
+      </div>
+
+      <div id="browser-group-printer" class="browser-group">
+        <div id="printer-store-empty" class="empty-state" style="display:none"></div>
+        <div id="printer-store-error" class="empty-state" style="display:none;color:var(--err);padding:20px 0"></div>
+        <div id="printer-store-select-bar" class="select-bar">
+          <label><input type="checkbox" id="printer-store-select-all" onchange="printerFileToggleSelectAll(this.checked)"><span id="printer-store-lbl-select-all">Selecionar todos</span></label>
+          <span id="printer-store-selected-count" class="muted" style="font-size:14px"></span>
+          <button id="printer-store-delete-selected-btn" class="btn btn-sm btn-danger" data-icon="trash-2" disabled onclick="printerFileDeleteSelected()"><span id="printer-store-lbl-delete-selected">Apagar seleção</span></button>
+          <button class="btn btn-sm btn-ghost" onclick="printerFileExitSelectMode()"><span id="printer-store-lbl-exit-select">Cancelar</span></button>
+        </div>
+        <div id="printer-store-grid" class="card-grid"></div>
+      </div>
+    </div>
+
+    <!-- ═══ EVENTOS ═══ -->
+    <div class="panel" id="panel-console">
+      <div class="page-head">
+        <h1 id="ptitle-console">Registro de eventos</h1>
+        <div class="actions">
+          <button id="btn-autoscroll" class="btn btn-sm btn-accent" data-icon="arrow-down-to-line" onclick="toggleAutoScroll()">Auto</button>
+          <button class="btn btn-sm btn-ghost" data-icon="eraser" onclick="consoleLogs=[];renderLog()" id="btn-log-clear">Limpar</button>
+          <a id="btn-log-dl" class="btn btn-sm btn-ghost" data-icon="download" href="/api/log/download" download style="text-decoration:none">Baixar</a>
+        </div>
+      </div>
+      <div class="browser-subtabs">
+        <button class="browser-tab active" id="ltab-live" onclick="showLogTab('live')"><span id="ltab-lbl-live">Ao vivo</span></button>
+        <button class="browser-tab" id="ltab-history" onclick="showLogTab('history')"><span id="ltab-lbl-history">Histórico</span></button>
+      </div>
+      <div id="log-group-live">
+      <div class="log-toolbar">
+        <div class="search-field" data-icon="search" style="max-width:340px"><input id="log-filter" type="text" placeholder="Filtrar…" oninput="renderLog()"></div>
+        <div class="seg" title="Direção">
+          <button class="log-dir-btn active" id="logdir-all" onclick="setLogDir('all')"></button>
+          <button class="log-dir-btn" id="logdir-rx" onclick="setLogDir('rx')">RX</button>
+          <button class="log-dir-btn" id="logdir-tx" onclick="setLogDir('tx')">TX</button>
+        </div>
+        <span class="seg-label" id="log-lbl-level">Nível</span>
+        <div class="seg">
+          <button class="log-lvl-btn active" id="loglvl-all" onclick="setLogLevel('all')"></button>
+          <button class="log-lvl-btn" id="loglvl-err" data-icon="octagon-alert" onclick="setLogLevel('err')">Erros</button>
+          <button class="log-lvl-btn" id="loglvl-warn" data-icon="triangle-alert" onclick="setLogLevel('warn')">Avisos</button>
+        </div>
+        <span class="seg-label">Tópico</span>
+        <div class="seg">
+          <button class="log-topic-btn" data-topic="multiColorBox" onclick="setLogTopic('multiColorBox')">ACE</button>
+          <button class="log-topic-btn" data-topic="print" onclick="setLogTopic('print')">Print</button>
+          <button class="log-topic-btn" data-topic="info" onclick="setLogTopic('info')">Info</button>
+          <button class="log-topic-btn" data-topic="status" onclick="setLogTopic('status')">Status</button>
+        </div>
+      </div>
+      <div class="console" id="console-log" onscroll="onLogScroll()"></div>
+      </div>
+      <div id="log-group-history" style="display:none">
+        <p class="hint" id="hist-hint">Cada impressão guarda o próprio log, comprimido. Abra para ler ou baixe em .txt.</p>
+        <div id="hist-list"></div>
+      </div>
+    </div>
+
+    <!-- ═══ ORÇAMENTO ═══
+         Peça (G-code + 3D) → Pedido (canal, cupom, quantidade) → Preço (pilha de estágios).
+         Cálculo no backend (pricing.py); a tela só manda as opções e desenha o resultado. -->
+    <div class="panel" id="panel-pricing">
+      <div class="page-head">
+        <h1><span data-t="pr_title">Orçamento</span> <span class="dymo yellow beta" title="Em desenvolvimento: confira os valores antes de mandar ao cliente">Beta</span></h1>
+      </div>
+      <div class="browser-subtabs">
+        <button class="browser-tab active" id="prtab-calc" onclick="prTab('calc')"><span data-t="pr_tab_calc">Calcular</span></button>
+        <button class="browser-tab" id="prtab-quotes" onclick="prTab('quotes')"><span data-t="pr_tab_quotes">Orçamentos</span></button>
+        <button class="browser-tab" id="prtab-config" onclick="prTab('config')"><span data-t="pr_tab_config">Configurar</span></button>
+      </div>
+
+      <!-- Calcular -->
+      <div id="pr-group-calc">
+        <div class="pr-grid">
+          <section class="card pr-part">
+            <div class="card-title" data-icon="box"><span data-t="pr_part">Peça</span></div>
+            <select id="pr-file" class="pr-file" onchange="prPickFile(this.value)"></select>
+            <div class="preview-wrap full pr-view" id="pp-wrap">
+              <canvas id="pp-canvas" aria-label="Peça em 3D"></canvas>
+              <div class="preview-empty" id="pp-empty" data-icon="box"><span id="pp-empty-txt" data-t="pr_pick_file">Escolha um G-code da lista</span></div>
+              <div class="preview-meta" id="pp-meta"></div>
+              <button class="icon-btn preview-reset" data-icon="rotate-ccw" onclick="prPreview&&prPreview.resetView()" title="Recentralizar"></button>
+            </div>
+            <div class="pr-specs" id="pr-specs"></div>
+            <div class="pr-tools" id="pr-tools"></div>
+          </section>
+
+          <section class="card pr-order">
+            <div class="card-title" data-icon="sliders-horizontal"><span data-t="pr_order">Pedido</span></div>
+            <div class="pr-fields">
+              <label class="pr-f"><span data-t="pr_qty">Quantidade</span><input type="number" id="pr-qty" min="1" value="1" oninput="prCalcSoon()"></label>
+              <label class="pr-f"><span data-t="pr_per_plate">Peças por mesa</span><input type="number" id="pr-per-plate" min="1" value="1" oninput="prCalcSoon()" title="Quantas peças este G-code imprime de uma vez"></label>
+              <label class="pr-f"><span data-t="pr_channel">Canal de venda</span><select id="pr-channel" onchange="prCalcSoon()"></select></label>
+              <label class="pr-f"><span data-t="pr_tax">Imposto</span><select id="pr-tax" onchange="prCalcSoon()"></select></label>
+              <label class="pr-f pr-coupon"><span data-t="pr_coupon">Cupom</span>
+                <input type="text" id="pr-coupon" autocomplete="off" spellcheck="false" oninput="this.value=this.value.toUpperCase();prCalcSoon()">
+                <small id="pr-coupon-msg" class="pr-coupon-msg"></small></label>
+              <label class="pr-f"><span data-t="pr_shipping">Frete (R$)</span><input type="number" id="pr-shipping" min="0" step="0.01" placeholder="0" oninput="prCalcSoon()"></label>
+              <label class="pr-f"><span data-t="pr_extras">Adicionais por peça (R$)</span><input type="number" id="pr-extras" min="0" step="0.01" placeholder="0" oninput="prCalcSoon()"></label>
+              <label class="pr-f"><span data-t="pr_design">Modelagem (R$)</span><input type="number" id="pr-design" min="0" step="0.01" placeholder="0" oninput="prCalcSoon()"></label>
+              <label class="pr-f"><span data-t="pr_hours">Tempo (h)</span><input type="number" id="pr-hours" min="0" step="0.01" oninput="prCalcSoon()">
+                <small id="pr-hours-msg" class="hint"></small></label>
+              <label class="pr-f"><span data-t="pr_discount_pct">Desconto (%)</span><input type="number" id="pr-dpct" min="0" max="100" step="0.5" placeholder="0" oninput="prCalcSoon()"></label>
+              <label class="pr-f"><span data-t="pr_discount_value">Desconto (R$)</span><input type="number" id="pr-dval" min="0" step="0.01" placeholder="0" oninput="prCalcSoon()"></label>
+            </div>
+            <div class="check-row"><input type="checkbox" id="pr-urgent" onchange="prCalcSoon()"><label for="pr-urgent" id="pr-urgent-lbl" data-t="pr_urgent">Urgente</label></div>
+            <label class="switch pr-valid-sw"><input type="checkbox" id="pr-valid" checked onchange="prCalcSoon()"><span data-t="pr_validity">Orçamento com validade</span></label>
+            <div class="pr-fields pr-client">
+              <label class="pr-f"><span data-t="pr_client">Cliente</span><input type="text" id="pr-client" maxlength="120"></label>
+              <label class="pr-f pr-wide"><span data-t="pr_notes">Observações (vão no recibo)</span><textarea id="pr-notes" rows="2" maxlength="1000"></textarea></label>
+            </div>
+          </section>
+
+          <section class="card pr-result" id="pr-result">
+            <div class="card-title" data-icon="rocket"><span data-t="pr_price">Preço</span></div>
+            <div class="pr-readout">
+              <div>
+                <div class="plate"><span data-t="pr_total">Total</span> <button type="button" class="pr-edit" data-icon="pencil" onclick="prEditTotal()" title="Editar o total" aria-label="Editar o total"></button></div>
+                <div class="pr-total num" id="pr-total" onclick="prEditTotal()">–</div>
+                <div class="pr-sub" id="pr-sub"></div>
+              </div>
+              <div class="pr-profit">
+                <div class="plate" data-t="pr_profit">Lucro real</div>
+                <div class="pr-profit-val num" id="pr-profit">–</div>
+                <div class="pr-sub" id="pr-margin"></div>
+              </div>
+            </div>
+            <div class="pr-stack-wrap">
+              <div class="pr-rocket" id="pr-rocket" aria-hidden="true"></div>
+              <div class="pr-manifest" id="pr-manifest"></div>
+            </div>
+            <div class="pr-warn" id="pr-warn"></div>
+            <div class="modal-actions pr-actions">
+              <button class="btn btn-ghost" data-icon="save" onclick="prSaveQuote()"><span data-t="pr_save">Salvar</span></button>
+              <button class="btn btn-accent" data-icon="receipt" onclick="prReceiptFromCalc()"><span data-t="pr_receipt">Recibo</span></button>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Orçamentos salvos -->
+      <div id="pr-group-quotes" style="display:none">
+        <div id="pr-quotes"></div>
+      </div>
+
+      <!-- Configurar -->
+      <div id="pr-group-config" style="display:none">
+        <p class="hint pr-cfg-hint"><span data-t="pr_cfg_hint">Taxas e impostos mudam: confira de tempos em tempos. Última revisão:</span> <b id="pr-cfg-updated"></b></p>
+        <div class="pr-cfg-grid">
+          <section class="card"><div class="card-title" data-icon="printer"><span data-t="pr_cfg_machine">Impressora e energia</span></div>
+            <div class="pr-fields" id="pr-cfg-machine"></div></section>
+          <section class="card"><div class="card-title" data-icon="clock"><span data-t="pr_cfg_labor">Mão de obra e risco</span></div>
+            <div class="pr-fields" id="pr-cfg-labor"></div></section>
+          <section class="card"><div class="card-title" data-icon="rocket"><span data-t="pr_cfg_price">Margem e preço</span></div>
+            <div class="pr-fields" id="pr-cfg-price"></div></section>
+          <section class="card"><div class="card-title" data-icon="receipt"><span data-t="pr_cfg_business">Seu negócio (vai no recibo)</span></div>
+            <div class="pr-fields" id="pr-cfg-business"></div></section>
+        </div>
+        <section class="card pr-cfg-card"><div class="card-title" data-icon="ticket"><span data-t="pr_cfg_coupons">Cupons</span></div>
+          <div class="pr-patches" id="pr-cfg-coupons"></div></section>
+        <section class="card pr-cfg-card"><div class="card-title" data-icon="spool"><span data-t="pr_cfg_materials">Materiais</span></div>
+          <div id="pr-cfg-materials"></div></section>
+        <section class="card pr-cfg-card"><div class="card-title" data-icon="share-2"><span data-t="pr_cfg_channels">Canais de venda</span></div>
+          <p class="hint" data-t="pr_cfg_channels_hint">Duas faixas: abaixo do limite (preço por peça) vale a primeira. Limite 0 = uma faixa só.</p>
+          <div id="pr-cfg-channels"></div></section>
+        <div class="pr-cfg-grid">
+          <section class="card"><div class="card-title" data-icon="list"><span data-t="pr_cfg_taxes">Impostos</span></div>
+            <div id="pr-cfg-taxes"></div></section>
+          <section class="card"><div class="card-title" data-icon="layers"><span data-t="pr_cfg_qty">Desconto por quantidade</span></div>
+            <div id="pr-cfg-qty"></div></section>
+        </div>
+        <div class="modal-actions pr-cfg-actions">
+          <span id="pr-cfg-status" class="muted"></span>
+          <button class="btn btn-ghost" data-icon="download" onclick="prExportConfig()"><span data-t="pr_cfg_export">Exportar</span></button>
+          <button class="btn btn-ghost" data-icon="upload" onclick="document.getElementById('pr-cfg-file').click()"><span data-t="pr_cfg_import">Importar</span></button>
+          <input type="file" id="pr-cfg-file" accept=".json,application/json" style="display:none" onchange="prImportConfig(this.files[0]);this.value=''">
+          <button class="btn btn-accent" data-icon="save" onclick="prSaveConfig()"><span data-t="pr_cfg_save">Salvar configuração</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CONFIGURAÇÕES ═══ -->
+    <div class="panel" id="panel-settings">
+      <div class="settings-wrap">
+        <div class="settings-cats">
+          <button class="set-cat active" id="setcat-connection" data-icon="cable" onclick="showSettingsCat('connection')"><span id="setcat-lbl-connection">Conexão</span></button>
+          <button class="set-cat" id="setcat-printer" data-icon="printer" onclick="showSettingsCat('printer')"><span id="setcat-lbl-printer">Impressão</span></button>
+          <button class="set-cat" id="setcat-display" data-icon="palette" onclick="showSettingsCat('display')"><span id="setcat-lbl-display">Aparência</span></button>
+          <button class="set-cat" id="setcat-filament" data-icon="disc-3" onclick="showSettingsCat('filament')"><span id="setcat-lbl-filament">Filamento</span></button>
+          <button class="set-cat" id="setcat-integrations" data-icon="blocks" onclick="showSettingsCat('integrations')"><span id="setcat-lbl-integrations">Integrações</span></button>
+          <button class="set-cat" id="setcat-api" data-icon="file-code" onclick="showSettingsCat('api')"><span id="setcat-lbl-api">API</span></button>
+          <button class="set-cat" id="setcat-system" data-icon="shield" onclick="showSettingsCat('system')"><span id="setcat-lbl-system">Sistema</span></button>
+        </div>
+
+        <div class="settings-content">
+          <!-- Conexão -->
+          <div class="set-group active" id="setgrp-connection">
+            <div class="card">
+              <div class="card-title" data-icon="cable"><span id="modal-sec-connection">Conexão</span></div>
+              <div class="modal-field"><label id="lbl-printer-name">Nome da impressora</label><input type="text" id="s-printer-name" placeholder="ex.: Kobra X"></div>
+              <div class="modal-field"><label id="lbl-printer-ip">IP da impressora</label><input type="text" id="s-printer-ip" placeholder="192.168.x.x"><small id="lbl-ip-hint" style="color:var(--warn);display:none"></small></div>
+              <div class="modal-field"><label id="lbl-mqtt-port">Porta MQTT</label><input type="number" id="s-mqtt-port" placeholder="9883"></div>
+              <div class="modal-field"><label id="lbl-username">Usuário MQTT</label><input type="text" id="s-username" placeholder="userXXXXXXXX" autocomplete="new-password"></div>
+              <div class="modal-field"><label id="lbl-password">Senha MQTT</label><input type="password" id="s-password" autocomplete="new-password"></div>
+              <div class="modal-field"><label id="lbl-device-id">Device ID</label><input type="text" id="s-device-id" placeholder="32 caracteres hex"></div>
+              <div class="modal-field"><label id="lbl-mode-id">Mode ID</label><input type="text" id="s-mode-id" placeholder="20030"></div>
+            </div>
+            <div class="card">
+              <div class="card-title" data-icon="power"><span id="modal-sec-power">Interruptor de energia</span></div>
+              <div class="modal-field"><label id="lbl-power-on-url">URL para ligar</label><input type="text" id="s-power-on-url" placeholder="http://192.168.x.x/cm?cmnd=Power%20on"></div>
+              <div class="modal-field"><label id="lbl-power-off-url">URL para desligar</label><input type="text" id="s-power-off-url" placeholder="http://192.168.x.x/cm?cmnd=Power%20off"></div>
+              <div class="modal-field"><label id="lbl-power-status-url">URL de status</label><input type="text" id="s-power-status-url" placeholder="http://192.168.x.x/cm?cmnd=Power"><small id="lbl-power-hint" class="muted"></small></div>
+              <div class="check-row"><input type="checkbox" id="s-power-status-inverted"><label id="lbl-power-status-inverted" for="s-power-status-inverted">Mostrar o status atual em vez da ação</label></div>
+            </div>
+            <div class="card">
+              <div class="card-title" data-icon="smartphone"><span id="modal-sec-notify">Notificações</span></div>
+              <div class="modal-field"><label id="lbl-notify-url" for="s-notify-url">URL de notificação</label><input type="url" id="s-notify-url" placeholder="https://ntfy.sh/meu-topico"><small id="lbl-notify-hint" class="muted"></small></div>
+            </div>
+          </div>
+
+          <!-- Impressão -->
+          <div class="set-group" id="setgrp-printer">
+            <div class="card">
+              <div class="card-title" data-icon="printer"><span id="modal-sec-print">Impressão</span></div>
+              <div class="modal-field">
+                <label id="lbl-default-slot">Slot padrão (cor única)</label>
+                <select id="s-default-slot">
+                  <option value="auto" id="opt-slot-auto">Auto (todos os slots ocupados)</option>
+                  <option value="0" id="opt-slot-0">Slot 1</option>
+                  <option value="1" id="opt-slot-1">Slot 2</option>
+                  <option value="2" id="opt-slot-2">Slot 3</option>
+                  <option value="3" id="opt-slot-3">Slot 4</option>
+                </select>
+              </div>
+              <div class="check-row"><input type="checkbox" id="s-auto-leveling"><label id="lbl-auto-leveling" for="s-auto-leveling">Auto-nivelamento antes de imprimir</label></div>
+              <div class="check-row"><input type="checkbox" id="s-vibration-compensation"><label id="lbl-vibration-compensation" for="s-vibration-compensation">Compensação de ressonância antes de imprimir</label></div>
+              <div class="modal-field">
+                <label id="lbl-file-ready-mode">Depois do upload</label>
+                <select id="s-file-ready-mode">
+                  <option value="1" id="opt-file-ready-dialog">Diálogo de impressão</option>
+                  <option value="0" id="opt-file-ready-banner">Faixa de impressão</option>
+                </select>
+              </div>
+              <div class="check-row"><input type="checkbox" id="s-camera-on-print"><label id="lbl-camera-on-print" for="s-camera-on-print">Ligar a câmera ao iniciar a impressão</label></div>
+              <div class="check-row"><input type="checkbox" id="s-web-upload-warning"><label id="lbl-web-upload-warning" for="s-web-upload-warning">Avisar em impressões enviadas pela web</label></div>
+              <div class="check-row"><input type="checkbox" id="s-delete-printer-file-after-print"><label id="lbl-delete-printer-file-after-print" for="s-delete-printer-file-after-print">Apagar o arquivo da impressora após imprimir</label></div>
+              <small id="lbl-delete-printer-file-after-print-hint" class="hint"></small>
+            </div>
+          </div>
+
+          <!-- Aparência -->
+          <div class="set-group" id="setgrp-display">
+            <div class="card">
+              <div class="card-title" data-icon="palette"><span id="setcat-lbl-display2">Aparência</span></div>
+              <div class="modal-field">
+                <label id="lbl-set-lang">Idioma</label>
+                <select id="s-lang-select" onchange="setLanguage(this.value)">
+                  <option value="de">Deutsch</option>
+                  <option value="en">English</option>
+                  <option value="es">Español</option>
+                  <option value="fr">Français</option>
+                  <option value="it">Italiano</option>
+                  <option value="pt-br">Português (BR)</option>
+                  <option value="zh-cn">中文(简体)</option>
+                </select>
+              </div>
+              <div class="modal-field">
+                <label id="lbl-set-theme">Modo de exibição</label>
+                <div class="modes" role="group">
+                  <button data-theme-mode="light" data-icon="sun" onclick="setTheme('light')" aria-pressed="false"><span class="lbl-mode-light">Dia</span></button>
+                  <button data-theme-mode="dark" data-icon="moon" onclick="setTheme('dark')" aria-pressed="true"><span class="lbl-mode-dark">Noite</span></button>
+                  <button data-theme-mode="night" data-icon="eye" onclick="setTheme('night')" aria-pressed="false"><span class="lbl-mode-night">Madrugada</span></button>
+                </div>
+              </div>
+              <div class="modal-field">
+                <label id="lbl-poll-interval">Intervalo de consulta (segundos)</label>
+                <input type="number" id="s-poll-interval" min="1" max="60" step="1" placeholder="3" oninput="onPollIntervalInput()">
+                <small class="hint" id="lbl-poll-hint">Com que frequência o bridge consulta a impressora</small>
+              </div>
+              <div class="check-row"><input type="checkbox" id="s-verbose-http-log"><label id="lbl-verbose-http-log" for="s-verbose-http-log">Registrar toda requisição HTTP (detalhado)</label></div>
+              <div class="modal-field">
+                <label id="lbl-job-log-keep" for="s-job-log-keep">Logs de impressão guardados</label>
+                <input type="number" id="s-job-log-keep" min="0" max="1000" step="1" placeholder="100">
+                <small class="hint" id="lbl-job-log-keep-hint">Os mais antigos são apagados. 0 desliga o log por impressão.</small>
+              </div>
+              <div class="modal-field">
+                <label id="lbl-job-log-context" for="s-job-log-context">Linhas de antes do início da impressão</label>
+                <input type="number" id="s-job-log-context" min="0" max="2000" step="1" placeholder="200">
+                <small class="hint" id="lbl-job-log-context-hint">Entram no começo do log da impressão (envio, início, mapeamento do ACE).</small>
+              </div>
+              <div class="modal-field">
+                <label id="lbl-log-buffer" for="s-log-buffer">Linhas do registro ao vivo</label>
+                <input type="number" id="s-log-buffer" min="100" max="20000" step="100" placeholder="500">
+                <small class="hint" id="lbl-log-buffer-hint">Quanto o "Baixar" do Registro leva. A tela mostra só as últimas 500.</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filamento -->
+          <div class="set-group" id="setgrp-filament">
+            <div class="card">
+              <div class="card-title" data-icon="upload"><span id="modal-sec-orca-profiles">Perfis do OrcaSlicer</span></div>
+              <div class="hint" id="orca-profiles-hint" style="margin-bottom:10px">Importe perfis próprios do OrcaSlicer (Ajuda → Mostrar pasta de configuração)</div>
+              <div id="orca-profiles-list" style="margin-bottom:10px;font-size:13px" class="muted"></div>
+              <button class="btn btn-sm" id="btn-orca-profiles-import" data-icon="upload" onclick="openProfileImport()"><span id="lbl-orca-profiles-import">Importar perfis</span></button>
+            </div>
+            <div class="card">
+              <div class="card-title" data-icon="crosshair"><span id="lbl-filament-mapping">Perfil por slot</span></div>
+              <div class="hint" id="filament-mapping-hint" style="margin-bottom:10px">Perfil fixo do Orca por slot do ACE.</div>
+              <div id="filament-mapping-list"></div>
+              <button class="btn btn-sm btn-accent" data-icon="save" style="margin-top:10px" onclick="saveFilamentMapping()"><span id="lbl-filament-mapping-save">Salvar mapeamento</span></button>
+            </div>
+            <div class="card">
+              <div class="card-title" data-icon="eye"><span id="lbl-visible-vendors">Fabricantes visíveis</span></div>
+              <div class="hint" id="visible-vendors-hint" style="margin-bottom:10px">Só estes fabricantes aparecem na lista de perfis do slot.</div>
+              <div class="search-field" data-icon="search" style="margin-bottom:10px"><input type="text" id="vendor-filter-search" placeholder="Buscar fabricante…" oninput="renderVendorChecklist()"></div>
+              <div id="visible-vendors-list" class="panel-box" style="max-height:260px;overflow-y:auto"></div>
+              <button class="btn btn-sm btn-accent" data-icon="save" style="margin-top:10px" onclick="saveVisibleVendors()"><span id="lbl-visible-vendors-save">Salvar seleção</span></button>
+            </div>
+            <div class="card" id="spoolman-slot-card" style="display:none">
+              <div class="card-title" data-icon="disc-3"><span id="lbl-spoolman-slot-assign">Spoolman · carretel por slot</span></div>
+              <div class="hint" id="lbl-spoolman-slot-hint" style="margin-bottom:10px">Atribua um carretel do Spoolman a cada slot do ACE.</div>
+              <div id="spoolman-slot-rows" style="display:flex;flex-direction:column;gap:8px"></div>
+              <button class="btn btn-sm btn-accent" data-icon="save" style="margin-top:10px" onclick="saveSpoolmanSlots()"><span id="lbl-spoolman-slot-save">Salvar atribuição</span></button>
+            </div>
+          </div>
+
+          <!-- Integrações -->
+          <div class="set-group" id="setgrp-integrations">
+            <div class="card">
+              <div class="card-title" data-icon="video"><span id="lbl-cam-urls-title">Câmera para OBS</span></div>
+              <div class="hint" id="lbl-cam-urls-hint" style="margin-bottom:12px">Endereços só da câmera, no formato do OctoPrint. Cole no OBS (Fonte de mídia ou Navegador). Se a câmera estiver desligada, o bridge liga sozinho.</div>
+              <div class="field-label" id="lbl-cam-url-stream">Stream ao vivo (MJPEG)</div>
+              <div class="cam-url-row"><input type="text" id="cam-url-stream" readonly onclick="this.select()"><button class="icon-btn" data-icon="copy" onclick="copyCamUrl('cam-url-stream')" title="Copiar"></button></div>
+              <div class="field-label" id="lbl-cam-url-snapshot">Foto (snapshot)</div>
+              <div class="cam-url-row"><input type="text" id="cam-url-snapshot" readonly onclick="this.select()"><button class="icon-btn" data-icon="copy" onclick="copyCamUrl('cam-url-snapshot')" title="Copiar"></button></div>
+              <button class="btn btn-sm btn-ghost" id="btn-cam-token-new" data-icon="refresh-cw" style="display:none;margin-top:4px" onclick="newCameraToken()"><span id="lbl-cam-token-new">Gerar novo token (invalida os links antigos)</span></button>
+            </div>
+            <div class="card">
+              <div class="card-title" data-icon="disc-3"><span id="modal-sec-spoolman">Spoolman</span></div>
+              <div class="set-row"><label id="lbl-spoolman-url">URL do servidor</label><input type="text" id="s-spoolman-url" placeholder="http://spoolman:7912"></div>
+              <div class="set-row"><label id="lbl-spoolman-sync-rate">Sincronização (s, 0 = no fim)</label><input type="number" id="s-spoolman-sync-rate" min="0" max="3600" value="30" style="max-width:140px"></div>
+              <div id="spoolman-status-row" style="font-size:13px" class="muted"><span id="spoolman-status-dot">●</span> <span id="spoolman-status-lbl"></span></div>
+            </div>
+            <div class="card">
+              <div class="card-title" data-icon="eye"><span id="modal-sec-obico">Obico</span></div>
+              <div class="hint" id="obico-info-box">O Obico é configurado no container <code>moonraker-obico</code>.<br>Arquivo: <code id="obico-cfg-path">moonraker-obico.cfg</code></div>
+            </div>
+          </div>
+
+          <!-- API -->
+          <div class="set-group" id="setgrp-api">
+            <div class="card">
+              <div class="card-title" data-icon="key-round"><span id="lbl-api-key-title">Chave de API</span></div>
+              <div class="hint" id="lbl-api-key-hint" style="margin-bottom:12px"></div>
+              <div class="modal-field">
+                <label id="lbl-auth-api-key">Chave de API (OrcaSlicer / Obico)</label>
+                <div class="cam-url-row"><input type="text" id="s-auth-api-key" style="font-family:var(--mono)" autocomplete="off" oninput="_fillApiGuide()"><button class="icon-btn" type="button" data-icon="copy" onclick="copyCamUrl('s-auth-api-key')" title="Copiar"></button><button class="btn btn-sm" type="button" data-icon="key-round" onclick="_authGenerateKey()" id="lbl-auth-generate">Gerar</button></div>
+              </div>
+              <div id="api-login-off" class="hint" style="color:var(--warn)"></div>
+              <div id="api-status" style="font-size:13px;margin:6px 0"></div>
+              <button class="btn btn-sm btn-accent" type="button" data-icon="save" onclick="saveAuth('api-status')" id="btn-api-save"><span id="lbl-api-save">Salvar chave e reiniciar</span></button>
+            </div>
+            <div class="card">
+              <div class="card-title" data-icon="file-code"><span id="lbl-api-guide-title">Guia rápido da API</span></div>
+              <div class="hint" id="lbl-api-guide-hint" style="margin-bottom:12px"></div>
+              <div class="field-label" id="lbl-api-base">Endereço base</div>
+              <div class="cam-url-row"><input type="text" id="api-base-url" readonly onclick="this.select()"><button class="icon-btn" data-icon="copy" onclick="copyCamUrl('api-base-url')" title="Copiar"></button></div>
+              <div class="field-label" id="lbl-api-examples">Exemplos (curl)</div>
+              <pre class="api-ex" id="api-examples"></pre>
+              <div class="field-label" id="lbl-api-endpoints">Endpoints mais usados</div>
+              <table class="api-table">
+                <tr><td>GET</td><td><code>/api/state</code></td><td id="lbl-api-ep-state"></td></tr>
+                <tr><td>GET</td><td><code>/printer/objects/query?print_stats</code></td><td id="lbl-api-ep-query"></td></tr>
+                <tr><td>POST</td><td><code>/server/files/upload</code></td><td id="lbl-api-ep-upload"></td></tr>
+                <tr><td>POST</td><td><code>/printer/print/pause</code> · <code>resume</code> · <code>cancel</code></td><td id="lbl-api-ep-control"></td></tr>
+                <tr><td>GET</td><td><code>/kx/files</code></td><td id="lbl-api-ep-files"></td></tr>
+                <tr><td>GET</td><td><code>/api/camera/snapshot</code></td><td id="lbl-api-ep-snapshot"></td></tr>
+                <tr><td>WS</td><td><code>/websocket</code></td><td id="lbl-api-ep-ws"></td></tr>
+              </table>
+              <div class="hint" id="lbl-api-more" style="margin-top:10px"></div>
+            </div>
+          </div>
+
+          <!-- Sistema -->
+          <div class="set-group" id="setgrp-system">
+            <div class="card" id="auth-card">
+              <div class="card-title" data-icon="lock"><span id="lbl-auth-title">Acesso / Login</span></div>
+              <div id="lbl-auth-hint" class="hint" style="margin-bottom:12px"></div>
+              <div class="check-row"><input type="checkbox" id="s-auth-enabled" onchange="_authToggleFields()"><label id="lbl-auth-enable" for="s-auth-enabled">Exigir login</label></div>
+              <div id="auth-fields">
+                <div class="modal-field"><label id="lbl-auth-user">Usuário</label><input type="text" id="s-auth-user" autocomplete="username"></div>
+                <div class="modal-field"><label id="lbl-auth-password">Senha</label><input type="password" id="s-auth-password" autocomplete="new-password"></div>
+              </div>
+              <div id="auth-status" style="font-size:13px;margin:6px 0"></div>
+              <button class="btn btn-sm btn-accent" type="button" data-icon="save" onclick="saveAuth()" id="lbl-auth-save">Salvar login e reiniciar</button>
+            </div>
+            <div class="card">
+              <div class="card-title" data-icon="download"><span data-t="bk_title">Backup da configuração</span></div>
+              <p class="hint" style="margin-bottom:12px" data-t="bk_hint">Um .zip com a conexão, o login, os filamentos, o Spoolman, a configuração do Orçamento e os perfis importados. Guarde com cuidado: tem a senha da impressora. Histórico, G-codes e orçamentos salvos não vão junto.</p>
+              <div class="modal-actions" style="justify-content:flex-start">
+                <a class="btn btn-sm btn-ghost" data-icon="download" href="/kx/backup/export" download style="text-decoration:none"><span data-t="bk_export">Exportar</span></a>
+                <button class="btn btn-sm btn-ghost" type="button" data-icon="upload" onclick="document.getElementById('bk-file').click()"><span data-t="bk_import">Importar e reiniciar</span></button>
+                <input type="file" id="bk-file" accept=".zip" style="display:none" onchange="bkImport(this.files[0]);this.value=''">
+              </div>
+              <div id="bk-status" class="hint" style="margin-top:8px"></div>
+            </div>
+            <div class="card">
+              <div class="card-title" data-icon="refresh-cw"><span id="modal-sec-version">Versão</span></div>
+              <span id="s-version-label" style="font:700 20px var(--cond)">–</span>
+            </div>
+          </div>
+
+          <button class="modal-save" data-icon="save" onclick="saveSettings()" id="btn-save-settings" style="margin-top:4px">Salvar e reiniciar</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<nav class="bottom-nav">
+  <button class="bnav-btn active" onclick="showPanel('dashboard')" id="bnb-dashboard"><span class="bnav-icon" data-icon="clock"></span>Agora</button>
+  <button class="bnav-btn" onclick="showPanel('printers');loadPrinterTab()" id="bnb-printers"><span class="bnav-icon" data-icon="printer"></span>Impressoras</button>
+  <button class="bnav-btn" onclick="showPanel('store');loadStore()" id="bnb-store"><span class="bnav-icon" data-icon="folder-open"></span>Arquivos</button>
+  <button class="bnav-btn" onclick="showPanel('pricing');prOpen()" id="bnb-pricing"><span class="bnav-icon" data-icon="calculator"></span><span data-t="nav_pricing">Orçamento</span></button>
+  <button class="bnav-btn" onclick="showPanel('console');clearLogBadge()" id="bnb-console"><span class="bnav-icon" data-icon="scroll-text"></span>Registro<span id="log-badge-bot" class="nav-count" style="display:none"></span></button>
+  <button class="bnav-btn" onclick="showPanel('settings')" id="bnb-settings"><span class="bnav-icon" data-icon="settings"></span>Ajustes</button>
+</nav>
+
+<!-- Recibo do orçamento ("manifesto"): o mesmo conteúdo sai como imagem (canvas) ou impressão/PDF -->
+<div class="modal-overlay" id="pr-receipt-dialog" onclick="if(event.target===this)prCloseReceipt()">
+  <div class="modal-box pr-receipt-box">
+    <div class="modal-header">
+      <span class="modal-title" data-icon="receipt"><span data-t="pr_receipt">Recibo</span></span>
+      <button class="modal-close" data-icon="x" onclick="prCloseReceipt()" aria-label="Fechar"></button>
+    </div>
+    <div id="pr-receipt"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-icon="copy" onclick="prReceiptCopy()"><span data-t="pr_copy_text">Copiar texto</span></button>
+      <span id="pr-rc-status" class="muted pr-rc-status"></span>
+      <button class="btn btn-ghost" data-icon="printer" onclick="prReceiptPrint()"><span data-t="pr_print">Imprimir / PDF</span></button>
+      <button class="btn btn-ghost" data-icon="image" onclick="prReceiptCopyImage()"><span data-t="pr_copy_image">Copiar imagem</span></button>
+      <button class="btn btn-accent" data-icon="download" onclick="prReceiptImage()"><span data-t="pr_image">Baixar imagem</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- Verificação de upload pela web -->
+<div class="modal-overlay" id="store-web-verify-dialog" onclick="if(event.target===this)closeStoreWebVerifyDialog()">
+  <div class="modal-box" style="max-width:440px">
+    <div class="modal-header">
+      <span class="modal-title" id="store-web-verify-title">Verificar arquivo</span>
+      <button class="modal-close" data-icon="x" onclick="closeStoreWebVerifyDialog()" aria-label="Fechar"></button>
+    </div>
+    <p id="store-web-verify-msg" style="font-size:14px">Confirme que este arquivo foi fatiado para a Anycubic Kobra X.</p>
+    <div id="store-web-verify-status" class="muted" style="font-size:13px;min-height:16px"></div>
+    <div class="modal-actions">
+      <button id="store-web-verify-abort" class="btn btn-ghost" onclick="closeStoreWebVerifyDialog()">Cancelar</button>
+      <button id="store-web-verify-confirm" class="btn btn-accent" data-icon="check" onclick="confirmStoreWebVerify()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Slots de filamento da impressão -->
+<div class="modal-overlay" id="filament-dialog" onclick="if(event.target===this)closeFilamentDialog()">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-header">
+      <span class="modal-title" id="fd-title" style="word-break:break-all"></span>
+      <button class="modal-close" data-icon="x" onclick="closeFilamentDialog()" aria-label="Fechar"></button>
+    </div>
+    <p id="fd-slots-hint" class="hint">Canal do G-code → slot do ACE:</p>
+    <div id="fd-mismatch-warn" class="callout" style="display:none"></div>
+    <div id="fd-slots" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div id="fd-objects-section" style="display:none">
+      <button type="button" id="fd-objects-toggle" class="btn btn-ghost" style="width:100%;justify-content:flex-start" onclick="toggleFdObjects()">
+        <span id="fd-objects-arrow" data-icon="chevron-right" style="transition:transform .15s"></span>
+        <span data-icon="scissors"><span id="fd-objects-toggle-lbl">Pular objetos</span></span>
+        <span id="fd-objects-count" class="muted" style="margin-left:auto"></span>
+      </button>
+      <div id="fd-objects-body" style="display:none;margin-top:8px">
+        <div id="fd-objects-svg" class="panel-box" style="display:none;text-align:center;margin-bottom:8px"></div>
+        <div id="fd-objects" style="display:flex;flex-direction:column;gap:6px;max-height:160px;overflow-y:auto"></div>
+      </div>
+    </div>
+    <div class="panel-box">
+      <div class="field-label" id="fd-options-title">Opções de impressão</div>
+      <div class="check-row" style="margin:0"><input type="checkbox" id="fd-auto-leveling"><label for="fd-auto-leveling" id="fd-lbl-auto-leveling">Auto-nivelamento</label></div>
+    </div>
+    <div id="fd-spoolman-section" style="display:none">
+      <div class="field-label"><span id="fd-spoolman-lbl" data-icon="disc-3">Spoolman</span> <span id="fd-spoolman-loading" style="display:none">…</span></div>
+      <div id="fd-spoolman-rows" style="display:flex;flex-direction:column;gap:6px"></div>
+    </div>
+    <div class="modal-actions">
+      <button id="fd-cancel" class="btn btn-ghost" onclick="closeFilamentDialog()">Cancelar</button>
+      <button id="fd-print" class="btn btn-accent" data-icon="play" onclick="confirmFilamentPrint()">Imprimir</button>
+    </div>
+  </div>
+</div>
+
+<!-- Adicionar impressora -->
+<div class="modal-overlay" id="add-printer-dialog" onclick="if(event.target===this)closeAddPrinterDialog()">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-header">
+      <span class="modal-title" id="apd-title">Adicionar impressora</span>
+      <button class="modal-close" data-icon="x" onclick="closeAddPrinterDialog()" aria-label="Fechar"></button>
+    </div>
+    <div class="modal-field" style="margin:0"><label id="apd-lbl-ip">IP da impressora</label><input type="text" id="apd-ip" placeholder="192.168.1.100"></div>
+    <div class="modal-field" style="margin:0"><label id="apd-lbl-name">Nome (opcional)</label><input type="text" id="apd-name" placeholder="ex.: Kobra X da sala"></div>
+    <div id="apd-status" class="muted" style="font-size:13px;min-height:16px"></div>
+    <div class="modal-actions">
+      <button id="apd-cancel" class="btn btn-ghost" onclick="closeAddPrinterDialog()">Cancelar</button>
+      <button id="apd-confirm" class="btn btn-accent" data-icon="plus" onclick="confirmAddPrinter()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pular objetos durante a impressão -->
+<div class="modal-overlay" id="skip-dialog" onclick="if(event.target===this)closeSkipDialog()">
+  <div class="modal-box" style="max-width:440px">
+    <div class="modal-header">
+      <span class="modal-title" id="skip-title" data-icon="scissors">Pular objetos</span>
+      <button class="modal-close" data-icon="x" onclick="closeSkipDialog()" aria-label="Fechar"></button>
+    </div>
+    <p id="skip-hint" class="hint">Desmarque os objetos que não devem continuar sendo impressos:</p>
+    <div id="skip-svg" class="panel-box" style="display:none;text-align:center"></div>
+    <div id="skip-list" style="display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto"></div>
+    <div id="skip-status" class="muted" style="font-size:13px;min-height:16px"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeSkipDialog()">Cancelar</button>
+      <button id="skip-confirm" class="btn btn-accent" data-icon="scissors" onclick="confirmSkip()">Pular</button>
+    </div>
+  </div>
+</div>
+
+<!-- Secador do ACE -->
+<div class="modal-overlay" id="ace-dry-dialog" onclick="if(event.target===this)closeAceDryDialog()">
+  <div class="modal-box" style="max-width:560px">
+    <div class="modal-header">
+      <span class="modal-title" id="ace-dry-dialog-title" data-icon="heater">Secador</span>
+      <button class="modal-close" data-icon="x" onclick="closeAceDryDialog()" aria-label="Fechar"></button>
+    </div>
+    <div class="modal-field" style="margin:0">
+      <label id="ace-dry-dialog-temp-label">Temperatura (30–80 °C)</label>
+      <input id="ace-dry-dialog-temp" type="number" min="30" max="80" step="1" value="45" oninput="aceDryDialogInputsChanged()" style="max-width:140px;font:700 18px var(--cond)">
+    </div>
+    <div class="modal-field" style="margin:0">
+      <label id="ace-dry-dialog-time-label">Tempo restante (h:m:s)</label>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input id="ace-dry-dialog-h" type="number" min="0" max="24" step="1" value="4" oninput="aceDryDialogInputsChanged()" style="width:76px;text-align:center;font:700 18px var(--cond)">
+        <span class="muted">:</span>
+        <input id="ace-dry-dialog-m" type="number" min="0" max="59" step="1" value="0" oninput="aceDryDialogInputsChanged()" style="width:76px;text-align:center;font:700 18px var(--cond)">
+        <span class="muted">:</span>
+        <input id="ace-dry-dialog-s" type="number" min="0" max="59" step="1" value="0" oninput="aceDryDialogInputsChanged()" style="width:76px;text-align:center;font:700 18px var(--cond)">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <button class="ace-dry-preset-btn" data-preset="pla" onclick="aceDryDialogPreset('pla')">PLA</button>
+      <button class="ace-dry-preset-btn" data-preset="pla_plus" onclick="aceDryDialogPreset('pla_plus')">PLA+</button>
+      <button class="ace-dry-preset-btn" data-preset="petg" onclick="aceDryDialogPreset('petg')">PETG</button>
+      <button class="ace-dry-preset-btn" data-preset="tpu" onclick="aceDryDialogPreset('tpu')">TPU</button>
+      <button class="ace-dry-preset-btn" data-preset="abs_asa" onclick="aceDryDialogPreset('abs_asa')">ABS / ASA</button>
+      <button class="ace-dry-preset-btn" data-preset="pa_pc" onclick="aceDryDialogPreset('pa_pc')">PA / PC</button>
+      <button class="ace-dry-preset-btn" data-preset="custom_1" onclick="aceDryDialogPreset('custom_1')">Custom 1</button>
+      <button class="ace-dry-preset-btn" data-preset="custom_2" onclick="aceDryDialogPreset('custom_2')">Custom 2</button>
+      <button class="ace-dry-preset-btn" data-preset="custom_3" onclick="aceDryDialogPreset('custom_3')">Custom 3</button>
+    </div>
+    <div id="ace-dry-dialog-custom-name-row" style="display:none;align-items:center;gap:12px">
+      <label id="ace-dry-dialog-custom-name-label" style="font-size:13px;font-weight:600" class="muted">Nome</label>
+      <input id="ace-dry-dialog-custom-name" type="text" maxlength="32" oninput="aceDryDialogInputsChanged()">
+    </div>
+    <div class="modal-actions">
+      <button id="ace-dry-dialog-reset-default" class="btn btn-ghost" style="display:none" onclick="resetAceDryPresetToDefault()">Restaurar padrão</button>
+      <button id="ace-dry-dialog-save-preset" class="btn" data-icon="save" style="display:none" onclick="saveAceDryPresetAndRestart()">Salvar e reiniciar</button>
+      <button id="ace-dry-dialog-cancel" class="btn btn-ghost" onclick="closeAceDryDialog()">Cancelar</button>
+      <button id="ace-dry-dialog-confirm" class="btn btn-accent" data-icon="play" onclick="confirmAceDryDialog()">Iniciar</button>
+    </div>
+  </div>
+</div>
+
+<script src="/kx/ui/app.js"></script>
+</body>
+</html>

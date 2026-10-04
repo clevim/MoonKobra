@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MoonKobra – Login</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/kx/ui/lib/icon/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="/kx/ui/lib/icon/favicon-64.png">
+<link rel="apple-touch-icon" href="/kx/ui/lib/icon/icon-180.png">
+<link rel="stylesheet" href="/kx/ui/style.css">
+<meta name="theme-color" content="#171A1C">
+<style>
+  body{align-items:center;justify-content:center;padding:16px}
+  .login-card{background:var(--panel);border:1px solid var(--rule);border-radius:var(--r);box-shadow:var(--shadow);
+    width:min(380px,100%);overflow:hidden;animation:rise .32s var(--ease)}
+  /* o logo tem fundo ardósia próprio: a faixa usa a mesma cor em todos os modos */
+  .login-top{display:flex;justify-content:center;padding:14px 22px;background:#111417;border-bottom:1px solid var(--rule)}
+  .login-top img{width:min(300px,100%);height:auto;display:block}
+  [data-theme=night] .login-top img{filter:grayscale(1) brightness(.6) sepia(1) saturate(6) hue-rotate(-40deg)}
+  .login-body{padding:20px 22px 22px}
+  .login-card h1{font-size:24px;font-weight:650;font-stretch:96%;letter-spacing:-.015em;line-height:1.15;margin-bottom:6px}
+  .login-card .sub{font-size:14px;color:var(--ink-2);margin-bottom:18px;line-height:1.5}
+  .login-card label{display:block;margin:0 0 6px}
+  .login-card input{margin-bottom:16px}
+  .login-btn{width:100%;height:44px}
+  .login-err{color:var(--err);font-size:14px;text-align:center;margin-top:14px;min-height:20px}
+</style>
+</head>
+<body>
+<form class="login-card" id="login-form" autocomplete="on">
+  <div class="login-top"><img src="/kx/ui/lib/icon/logo-600.png" alt="MoonKobra" width="300" height="81"></div>
+  <div class="login-body">
+    <h1 id="login-h">Entrar</h1>
+    <p class="sub" id="login-sub">Acesso ao console da impressora.</p>
+    <label class="plate" for="u" id="lbl-u">Usuário</label>
+    <input id="u" name="username" autocomplete="username" autofocus required>
+    <label class="plate" for="p" id="lbl-p">Senha</label>
+    <input id="p" name="password" type="password" autocomplete="current-password" required>
+    <button class="btn btn-accent login-btn" id="go" type="submit">Entrar</button>
+    <div class="login-err" id="err"></div>
+  </div>
+</form>
+<!-- Troca de senha obrigatória (login padrão kx / kx123 no primeiro acesso) -->
+<form class="login-card" id="change-form" style="display:none" autocomplete="off">
+  <div class="login-top"><img src="/kx/ui/lib/icon/logo-600.png" alt="MoonKobra" width="300" height="81"></div>
+  <div class="login-body">
+    <h1>Nova senha</h1>
+    <p class="sub" id="change-hint">Por segurança, troque a senha padrão antes de continuar.</p>
+    <label class="plate" for="np1" id="lbl-np1">Nova senha</label>
+    <input id="np1" type="password" autocomplete="new-password" minlength="8" required>
+    <label class="plate" for="np2" id="lbl-np2">Repita a nova senha</label>
+    <input id="np2" type="password" autocomplete="new-password" minlength="8" required>
+    <button class="btn btn-accent login-btn" id="go2" type="submit">Trocar senha</button>
+    <div class="login-err" id="err2"></div>
+  </div>
+</form>
+<script>
+(function(){
+  var form=document.getElementById('login-form'),
+      err =document.getElementById('err'),
+      go  =document.getElementById('go'),
+      pw  =document.getElementById('p'),
+      T   ={};
+
+  // Adota o tema e o idioma do usuário para o login não destoar do resto
+  // da interface. Os dois ficam no localStorage, que o
+  // app.js já definiu antes do logout.
+  try{ var t=localStorage.getItem('theme'); if(t) document.documentElement.setAttribute('data-theme',t); }catch(e){}
+
+  function lang(){
+    try{ var l=localStorage.getItem('lang'); if(l) return l; }catch(e){}
+    var n=(navigator.language||'pt-br').toLowerCase().replace(/_/g,'-');
+    if(n.indexOf('pt')===0) return 'pt-br';
+    return n.split('-')[0];
+  }
+  // Tradução faltando cai em silêncio para o texto em pt-BR do HTML.
+  fetch('/kx/ui/translations/'+lang()+'.json')
+    .then(function(r){ return r.ok?r.json():{}; })
+    .then(function(d){
+      T=d||{};
+      if(T.login_user)     document.getElementById('lbl-u').textContent=T.login_user;
+      if(T.login_title)    document.getElementById('login-h').textContent=T.login_title;
+      if(T.login_sub)      document.getElementById('login-sub').textContent=T.login_sub;
+      if(T.login_password) document.getElementById('lbl-p').textContent=T.login_password;
+      if(T.login_submit)   go.textContent=T.login_submit;
+      if(T.login_change_hint)      document.getElementById('change-hint').textContent=T.login_change_hint;
+      if(T.login_new_password)     document.getElementById('lbl-np1').textContent=T.login_new_password;
+      if(T.login_confirm_password) document.getElementById('lbl-np2').textContent=T.login_confirm_password;
+      if(T.login_change_submit)    document.getElementById('go2').textContent=T.login_change_submit;
+      document.documentElement.setAttribute('lang',lang());
+    })
+    .catch(function(){});
+
+  // `next` vem da URL - só permite caminhos relativos, senão o
+  // formulário de login vira um redirecionamento aberto para um site de terceiros.
+  function goNext(){
+    var nxt=new URLSearchParams(location.search).get('next')||'/';
+    if(!/^\/(?!\/)/.test(nxt)) nxt='/';
+    location.replace(nxt);
+  }
+  function showChange(){
+    form.style.display='none';
+    document.getElementById('change-form').style.display='';
+    document.getElementById('np1').focus();
+  }
+  if(new URLSearchParams(location.search).get('trocar')) showChange();
+  document.getElementById('change-form').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var a=document.getElementById('np1').value, b=document.getElementById('np2').value,
+        e2=document.getElementById('err2'), go2=document.getElementById('go2');
+    if(a!==b){ e2.textContent=T.login_change_mismatch||'As senhas não conferem.'; return; }
+    e2.textContent=''; go2.disabled=true;
+    fetch('/api/auth/change',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({password:a})})
+    .then(function(r){ return r.json().then(function(d){ if(!r.ok) throw new Error(d.error||r.status); return d; }); })
+    .then(function(){
+      e2.style.color='var(--ok,#4caf50)';
+      e2.textContent=T.login_change_saved||'Senha trocada. Reiniciando…';
+      // O bridge reinicia; o cookie de sessão continua valendo.
+      setTimeout(goNext, 5000);
+    })
+    .catch(function(x){ e2.textContent=String(x.message||x); go2.disabled=false; });
+  });
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    err.textContent=''; go.disabled=true;
+    fetch('/api/login',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({user:document.getElementById('u').value, password:pw.value})
+    }).then(function(r){
+      if(r.status===429) throw new Error('locked');
+      if(!r.ok) throw new Error('invalid');
+      return r.json();
+    }).then(function(d){
+      if(d&&d.must_change){ go.disabled=false; showChange(); return; }
+      goNext();
+    }).catch(function(x){
+      err.textContent=(x&&x.message==='locked')?(T.login_locked||'Muitas tentativas erradas. Tente de novo em 15 minutos.'):(T.login_failed||'Usuário ou senha incorretos.');
+      go.disabled=false;
+      pw.value=''; pw.focus();
+    });
+  });
+})();
+</script>
+</body>
+</html>
