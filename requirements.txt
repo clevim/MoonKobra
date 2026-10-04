@@ -1,0 +1,4 @@
+aiohttp>=3.9
+imageio-ffmpeg>=0.4.9
+requests>=2.30.0
+pycryptodome>=3.20.0

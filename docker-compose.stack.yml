@@ -1,0 +1,211 @@
+# KobraX Full Stack — MoonKobra + Obico Self-Hosted + Spoolman
+#
+# For Portainer: Stack → Add Stack → Upload → select this file
+#
+# Prerequisite: build the images locally once (no registry):
+#   MoonKobra:       docker build -t moonkobra:local .
+#   Obico:           in a clone of TheSpaghettiDetective/obico-server run
+#                    `docker compose build` (gives obico-server-web/ml_api/tasks)
+#   moonraker-obico: in a clone of TheSpaghettiDetective/moonraker-obico run
+#                    `docker build -t moonraker-obico:local .`
+#
+# Persistent data: /mnt/dockerdata/KobraXStack/<service>/
+#
+# Ports:
+#   7125  — MoonKobra  (Moonraker API)
+#   3334  — Obico      (Web UI)
+#   7912  — Spoolman   (Web UI)
+#
+# Obico admin account after first start:
+#   docker exec obico-web python manage.py createsuperuser
+
+x-obico-base: &obico-base
+  restart: unless-stopped
+  volumes:
+    - /mnt/dockerdata/KobraXStack/obico/data:/data
+    - /mnt/dockerdata/KobraXStack/obico/frontend:/frontend
+  depends_on:
+    - obico-redis
+  environment:
+    DEBUG: "False"
+    REDIS_URL: "redis://obico-redis:6379"
+    DATABASE_URL: "sqlite:////data/db.sqlite3"
+    INTERNAL_MEDIA_HOST: "http://obico-web:3334"
+    ML_API_HOST: "http://obico-ml:3333"
+    ACCOUNT_ALLOW_SIGN_UP: "False"
+    SITE_USES_HTTPS: "False"
+    SITE_IS_PUBLIC: "False"
+    DJANGO_SECRET_KEY: "change-me-to-a-random-secret-key-before-use"
+    WEBPACK_LOADER_ENABLED: "False"
+  networks:
+    - kobrax-stack
+
+services:
+
+  # ── MoonKobra ───────────────────────────────────────────────
+  moonkobra:
+    # Ainda não há imagem publicada: construa antes no host com
+    #   docker build -t moonkobra:local .
+    image: moonkobra:local
+    container_name: moonkobra
+    restart: unless-stopped
+    ports:
+      - "7125:7125"
+    volumes:
+      - /mnt/dockerdata/KobraXStack/moonkobra/config:/app/config
+      - /mnt/dockerdata/KobraXStack/moonkobra/data:/app/data
+    networks:
+      - kobrax-stack
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ── Spoolman ────────────────────────────────────────────────
+  spoolman:
+    image: ghcr.io/donkie/spoolman:latest
+    container_name: spoolman
+    restart: unless-stopped
+    ports:
+      - "7912:8000"
+    volumes:
+      - /mnt/dockerdata/KobraXStack/spoolman:/home/app/.local/share/spoolman
+    networks:
+      - kobrax-stack
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ── Obico Redis ─────────────────────────────────────────────
+  obico-redis:
+    image: redis:7.2-alpine
+    container_name: obico-redis
+    restart: unless-stopped
+    volumes:
+      - /mnt/dockerdata/KobraXStack/obico/redis:/data
+    networks:
+      - kobrax-stack
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      start_period: 10s
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+  # ── Obico ML API ────────────────────────────────────────────
+  obico-ml:
+    image: obico-server-ml_api:latest
+    container_name: obico-ml
+    restart: unless-stopped
+    command: bash -c "gunicorn --bind 0.0.0.0:3333 --workers 1 wsgi"
+    working_dir: /app
+    environment:
+      DEBUG: "False"
+      FLASK_APP: "server.py"
+    networks:
+      - kobrax-stack
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:3333/hc/ || exit 1"]
+      start_period: 30s
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ── Obico Web ───────────────────────────────────────────────
+  obico-web:
+    <<: *obico-base
+    image: obico-server-web:latest
+    container_name: obico-web
+    ports:
+      - "3334:3334"
+    depends_on:
+      - obico-ml
+      - obico-redis
+    command: >
+      sh -c 'python manage.py migrate &&
+             python manage.py shell -c "from django.contrib.sites.models import Site; s=Site.objects.first(); s.domain=\"192.168.178.204:3334\"; s.name=\"Obico\"; s.save()" &&
+             python manage.py collectstatic --noinput &&
+             daphne -b 0.0.0.0 -p 3334 config.routing:application'
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:3334/hc/ || exit 1"]
+      start_period: 60s
+      interval: 90s
+      timeout: 20s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ── Obico Tasks (Celery) ────────────────────────────────────
+  obico-tasks:
+    <<: *obico-base
+    image: obico-server-tasks:latest
+    container_name: obico-tasks
+    command: sh -c "celery -A config worker --beat -l info -c 2 -Q realtime,celery"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ── moonraker-obico plugin ──────────────────────────────────
+  # Connects MoonKobra to the Obico server (spaghetti detection, remote UI)
+  # Prerequisite: /mnt/dockerdata/KobraXStack/moonraker-obico/moonraker-obico.cfg
+  # must exist and contain a valid auth_token.
+  #
+  # Getting a token (after the first obico-web start):
+  #   docker exec obico-web python manage.py shell -c "
+  #   from app.models import OneTimeVerificationCode, User
+  #   from django.utils import timezone; from datetime import timedelta; import random
+  #   u = User.objects.first()
+  #   c = OneTimeVerificationCode.objects.create(user=u, code='%06d' % random.randint(100000,999999), expired_at=timezone.now()+timedelta(hours=2))
+  #   print('CODE:', c.code)"
+  #   curl -X POST 'http://localhost:3334/api/v1/octo/verify/?code=<CODE>'
+  #   → enter printer.auth_token from the response into the cfg
+  moonraker-obico:
+    image: moonraker-obico:local
+    container_name: moonraker-obico
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /mnt/dockerdata/KobraXStack/moonraker-obico:/opt/printer_data/config
+      - /mnt/dockerdata/KobraXStack/moonraker-obico/logs:/opt/printer_data/logs
+    command: ["-c", "/opt/printer_data/config/moonraker-obico.cfg"]
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  kobrax-stack:
+    driver: bridge
+
+# Directories must exist on the host:
+# mkdir -p /mnt/dockerdata/KobraXStack/moonkobra/config \
+#           /mnt/dockerdata/KobraXStack/moonkobra/data \
+#           /mnt/dockerdata/KobraXStack/spoolman \
+#           /mnt/dockerdata/KobraXStack/obico/data \
+#           /mnt/dockerdata/KobraXStack/obico/frontend \
+#           /mnt/dockerdata/KobraXStack/obico/redis \
+#           /mnt/dockerdata/KobraXStack/moonraker-obico/logs
+# Spoolman requires UID/GID 1000:
+# sudo chown -R 1000:1000 /mnt/dockerdata/KobraXStack/spoolman
+#
+# Create the moonraker-obico config (enter auth_token after Obico setup):
+# cp /path/to/moonraker-obico.cfg.example /mnt/dockerdata/KobraXStack/moonraker-obico/moonraker-obico.cfg

@@ -1,0 +1,18 @@
+[server]
+url = http://127.0.0.1:3334
+auth_token = REPLACE_ME
+sentry_opt = out
+
+[moonraker]
+host = 127.0.0.1
+port = 7125
+
+[webcam]
+disable_video_streaming = False
+snapshot_url = http://127.0.0.1:7125/api/camera/snapshot
+stream_url   = http://127.0.0.1:7125/api/camera/stream
+target_fps   = 5
+
+[logging]
+path  = /opt/printer_data/logs/moonraker-obico.log
+level = INFO

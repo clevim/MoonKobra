@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/moonkobra-banner.png" alt="MoonKobra" width="720"/>
+<img src="docs/assets/moonkobra-banner.png" alt="MoonKobra" width="720"/>
 
 **Teach your Kobra to speak Moonraker.**
 
@@ -18,8 +18,8 @@ English · [Português (Brasil)](README.pt-BR.md)
 ## What it is
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/moko/ok-dark.png">
-  <img src="docs/moko/ok-light.png" alt="Moko giving a thumbs up" width="130" align="right">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/moko/ok-dark.png">
+  <img src="docs/assets/moko/ok-light.png" alt="Moko giving a thumbs up" width="130" align="right">
 </picture>
 
 The Kobra X speaks Anycubic's own LAN protocol (MQTT). Slicers and tools from
@@ -49,8 +49,8 @@ filament, done, or asleep when the printer is off.
 ## Features
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/moko/print-dark.png">
-  <img src="docs/moko/print-light.png" alt="Moko watching the nozzle" width="130" align="right">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/moko/print-dark.png">
+  <img src="docs/assets/moko/print-light.png" alt="Moko watching the nozzle" width="130" align="right">
 </picture>
 
 **Printing**
@@ -100,8 +100,8 @@ filament, done, or asleep when the printer is off.
 ## Quick start
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/moko/upload-dark.png">
-  <img src="docs/moko/upload-light.png" alt="Moko carrying a file" width="130" align="right">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/moko/upload-dark.png">
+  <img src="docs/assets/moko/upload-light.png" alt="Moko carrying a file" width="130" align="right">
 </picture>
 
 **1. Enable LAN mode on the printer.**
@@ -115,8 +115,7 @@ git clone https://github.com/clevim/MoonKobra.git
 cd MoonKobra
 ./start.sh
 ```
-Before that, put the two [Anycubic certificates](#anycubic-certificates) in
-the folder. `docker compose up -d --build` works too.
+`docker compose up -d --build` works too.
 
 **3. Open the dashboard** at `http://HOST-IP:7125`.
 The first login is `kx` / `kx123`, and you will be asked to choose a new
@@ -124,7 +123,9 @@ password right away.
 
 **4. Add the printer.**
 In *Printers*, click *Add printer* and type the printer's IP. Username,
-password and device ID are read from the printer automatically.
+password, device ID and the printer's own TLS certificate are read from the
+printer automatically. The certificate is saved in `config/certs/`; delete that
+folder to fetch it again.
 
 **5. Connect OrcaSlicer.**
 Printer → Connection → type **Moonraker**, host `http://HOST-IP:7125` (with
@@ -134,20 +135,10 @@ API key field.
 > More than one printer? Add it the same way: each one gets its own port
 > (7125, 7126, …).
 
-### Anycubic certificates
-
-The printer only accepts MQTT connections signed with the TLS certificate
-from Anycubic Slicer Next, so MoonKobra needs two files: `anycubic_slicer.crt`
-and `anycubic_slicer.key`. They belong to Anycubic and are **not** distributed
-here. They are available in the KX-Bridge project, or you can extract them
-from your own Anycubic Slicer Next installation (they are embedded in
-`cloud_mqtt.dll`). Put both in the MoonKobra folder, next to
-`kobrax_moonraker_bridge.py` (or next to the binary), before starting.
-
 <details>
 <summary><b>Other ways to run it</b></summary>
 
-**Python directly** (with the [certificates](#anycubic-certificates) in place)
+**Python directly**
 ```bash
 pip install -r requirements.txt
 python kobrax_moonraker_bridge.py
@@ -189,8 +180,8 @@ The community build OrcaSlicer-KX already bundles all three.
 ## Brazilian filament profiles
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/moko/level-dark.png">
-  <img src="docs/moko/level-light.png" alt="Moko with a spirit level" width="130" align="right">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/moko/level-dark.png">
+  <img src="docs/assets/moko/level-light.png" alt="Moko with a spirit level" width="130" align="right">
 </picture>
 
 [`profiles/brasil/`](profiles/brasil/) has OrcaSlicer profiles for the
@@ -223,8 +214,8 @@ These are community projects, not maintained by MoonKobra.
 ## Troubleshooting
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/moko/empty-dark.png">
-  <img src="docs/moko/empty-light.png" alt="Moko confused, holding an empty spool" width="130" align="right">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/moko/empty-dark.png">
+  <img src="docs/assets/moko/empty-light.png" alt="Moko confused, holding an empty spool" width="130" align="right">
 </picture>
 
 <details>
@@ -261,8 +252,8 @@ sudo usermod -aG docker $USER   # then log out and back in
 ```
 </details>
 
-More in the [user manual](MANUAL.md) (Portuguese). Developers: see the
-[API reference](API.md).
+More in the [user manual](docs/en/manual.md). Developers: see the
+[API reference](docs/api.md).
 
 ---
 
@@ -286,17 +277,17 @@ its contributors; the Anycubic error-code table comes from
 [stribor/anycubic_kobrax](https://github.com/stribor/anycubic_kobrax) (MIT).
 
 The MQTT protocol support is the result of independent reverse engineering for
-interoperability. The Anycubic TLS certificates are **not** part of this
-repository nor covered by the GPL; each user supplies them, only to
-authenticate against printers the user already owns. Details in [NOTICE.md](NOTICE.md).
+interoperability. MoonKobra ships no Anycubic files: the TLS certificate used
+to talk to the printer is generated by the printer itself and handed over on
+the local network. Details in [NOTICE.md](NOTICE.md).
 
 MoonKobra is independent and not affiliated with Anycubic.
 
 <div align="center">
 <br>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/moko/sleep-dark.png">
-  <img src="docs/moko/sleep-light.png" alt="Moko asleep" width="110">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/moko/sleep-dark.png">
+  <img src="docs/assets/moko/sleep-light.png" alt="Moko asleep" width="110">
 </picture>
 <br>
 <sub>Moko is asleep. Go print something.</sub>

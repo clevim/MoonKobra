@@ -1,0 +1,31 @@
+# MoonKobra — Portainer Stack
+#
+# Paste this into Portainer → Stacks → Add stack → Web editor
+#
+# No configuration needed upfront — just deploy, open http://HOST-IP:7125
+# and add your printer via the UI (IP only, credentials are fetched automatically).
+#
+# All data (config, GCode store, database) is stored in named Docker volumes
+# managed by Portainer.
+
+services:
+  moonkobra:
+    # Ainda não há imagem publicada: construa antes no host com
+    #   docker build -t moonkobra:local .
+    image: moonkobra:local
+    volumes:
+      - moonkobra-config:/app/config
+      - moonkobra-data:/app/data
+    ports:
+      # Port 7125 = first printer. Add 7126, 7127, … for each additional printer.
+      - "7125:7125"
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  moonkobra-config:
+  moonkobra-data:

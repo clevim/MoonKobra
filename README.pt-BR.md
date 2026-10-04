@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/moonkobra-banner.png" alt="MoonKobra" width="720"/>
+<img src="docs/assets/moonkobra-banner.png" alt="MoonKobra" width="720"/>
 
 **Ensine sua Kobra a falar Moonraker.**
 
@@ -18,8 +18,8 @@ sem Klipper e sem Raspberry Pi.
 ## O que é
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/moko/ok-dark.png">
-  <img src="docs/moko/ok-light.png" alt="Moko fazendo joinha" width="130" align="right">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/moko/ok-dark.png">
+  <img src="docs/assets/moko/ok-light.png" alt="Moko fazendo joinha" width="130" align="right">
 </picture>
 
 A Kobra X fala o protocolo de rede local da própria Anycubic (MQTT). Os
@@ -49,8 +49,8 @@ esperando filamento, terminou ou dormindo quando a impressora está desligada.
 ## Recursos
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/moko/print-dark.png">
-  <img src="docs/moko/print-light.png" alt="Moko de olho no bico" width="130" align="right">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/moko/print-dark.png">
+  <img src="docs/assets/moko/print-light.png" alt="Moko de olho no bico" width="130" align="right">
 </picture>
 
 **Impressão**
@@ -106,8 +106,8 @@ esperando filamento, terminou ou dormindo quando a impressora está desligada.
 ## Começo rápido
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/moko/upload-dark.png">
-  <img src="docs/moko/upload-light.png" alt="Moko carregando um arquivo" width="130" align="right">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/moko/upload-dark.png">
+  <img src="docs/assets/moko/upload-light.png" alt="Moko carregando um arquivo" width="130" align="right">
 </picture>
 
 **1. Ative o modo LAN na impressora.**
@@ -121,15 +121,16 @@ git clone https://github.com/clevim/MoonKobra.git
 cd MoonKobra
 ./start.sh
 ```
-Antes, coloque os dois [certificados da Anycubic](#certificados-da-anycubic)
-na pasta. `docker compose up -d --build` também funciona.
+`docker compose up -d --build` também funciona.
 
 **3. Abra o painel** em `http://IP-DO-HOST:7125`.
 O primeiro login é `kx` / `kx123`, e ele pede uma senha nova na hora.
 
 **4. Adicione a impressora.**
 Em *Impressoras*, clique em *Adicionar impressora* e digite o IP dela.
-Usuário, senha e ID do dispositivo são lidos da impressora automaticamente.
+Usuário, senha, ID do dispositivo e o certificado TLS da própria impressora são
+lidos dela automaticamente. O certificado fica salvo em `config/certs/`; apague
+essa pasta para buscar de novo.
 
 **5. Conecte o OrcaSlicer.**
 Impressora → Conexão → tipo **Moonraker**, host `http://IP-DO-HOST:7125` (com
@@ -139,20 +140,10 @@ de API.
 > Mais de uma impressora? Adicione do mesmo jeito: cada uma ganha a própria
 > porta (7125, 7126, …).
 
-### Certificados da Anycubic
-
-A impressora só aceita conexão MQTT assinada com o certificado TLS do
-Anycubic Slicer Next, então o MoonKobra precisa de dois arquivos:
-`anycubic_slicer.crt` e `anycubic_slicer.key`. Eles são da Anycubic e **não**
-são distribuídos aqui. Estão disponíveis no projeto KX-Bridge, ou você pode
-extraí-los da sua própria instalação do Anycubic Slicer Next (ficam embutidos
-no `cloud_mqtt.dll`). Coloque os dois na pasta do MoonKobra, ao lado do
-`kobrax_moonraker_bridge.py` (ou do binário), antes de iniciar.
-
 <details>
 <summary><b>Outras formas de rodar</b></summary>
 
-**Python direto** (com os [certificados](#certificados-da-anycubic) na pasta)
+**Python direto**
 ```bash
 pip install -r requirements.txt
 python kobrax_moonraker_bridge.py
@@ -194,8 +185,8 @@ O build comunitário OrcaSlicer-KX já traz os três.
 ## Perfis de filamento brasileiros
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/moko/level-dark.png">
-  <img src="docs/moko/level-light.png" alt="Moko com um nível de bolha" width="130" align="right">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/moko/level-dark.png">
+  <img src="docs/assets/moko/level-light.png" alt="Moko com um nível de bolha" width="130" align="right">
 </picture>
 
 Em [`profiles/brasil/`](profiles/brasil/) ficam perfis do OrcaSlicer para a
@@ -227,8 +218,8 @@ São projetos da comunidade, não mantidos pelo MoonKobra.
 ## Solução de problemas
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/moko/empty-dark.png">
-  <img src="docs/moko/empty-light.png" alt="Moko confuso com um carretel vazio" width="130" align="right">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/moko/empty-dark.png">
+  <img src="docs/assets/moko/empty-light.png" alt="Moko confuso com um carretel vazio" width="130" align="right">
 </picture>
 
 <details>
@@ -265,8 +256,8 @@ sudo usermod -aG docker $USER   # depois saia e entre de novo na sessão
 ```
 </details>
 
-Mais no [manual do usuário](MANUAL.md). Para desenvolvedores, a
-[referência da API](API.md).
+Mais no [manual do usuário](docs/pt-BR/manual.md). Para desenvolvedores, a
+[referência da API](docs/api.md) (em inglês).
 
 ---
 
@@ -290,16 +281,17 @@ colaboradores; a tabela de códigos de erro da Anycubic vem de
 [stribor/anycubic_kobrax](https://github.com/stribor/anycubic_kobrax) (MIT).
 
 O suporte ao protocolo MQTT é fruto de engenharia reversa independente, para
-fins de interoperabilidade. Os certificados TLS da Anycubic **não** fazem
-parte deste repositório nem são cobertos pela GPL; cada usuário traz os seus, só para autenticar em impressoras que o usuário já possui. Detalhes em [NOTICE.md](NOTICE.md).
+fins de interoperabilidade. O MoonKobra não traz nenhum arquivo da Anycubic: o
+certificado TLS usado com a impressora é gerado por ela mesma e entregue pela
+rede local. Detalhes em [NOTICE.md](NOTICE.md).
 
 O MoonKobra é independente e não tem ligação com a Anycubic.
 
 <div align="center">
 <br>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/moko/sleep-dark.png">
-  <img src="docs/moko/sleep-light.png" alt="Moko dormindo" width="110">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/moko/sleep-dark.png">
+  <img src="docs/assets/moko/sleep-light.png" alt="Moko dormindo" width="110">
 </picture>
 <br>
 <sub>O Moko foi dormir. Vai imprimir alguma coisa.</sub>

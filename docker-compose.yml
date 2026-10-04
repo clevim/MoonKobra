@@ -1,0 +1,18 @@
+services:
+  moonkobra:
+    # Ainda não há imagem publicada: o Docker constrói a partir deste diretório.
+    build: .
+    image: moonkobra:local
+    volumes:
+      - ./config:/app/config
+      - ./data:/app/data
+    ports:
+      - "7125-7130:7125-7130"
+    # environment:
+    #   - BRIDGE_HOST_IP=192.168.1.100   # IP de LAN do host Docker (para o log mostrar o endereço certo)
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

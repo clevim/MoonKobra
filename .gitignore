@@ -27,8 +27,8 @@ PRODUCT.md
 web/DOC/
 release.sh
 
-# Certificados da Anycubic: não são nossos, não vão para o repositório.
-# Cada usuário traz os seus (veja README → Anycubic certificates).
+# Certificado que a impressora entrega (config/certs/) e os antigos do slicer.
+config/certs/
 anycubic_slicer.crt
 anycubic_slicer.key
 

@@ -17,6 +17,8 @@ data/pricing.json
 
 # Never ship real credentials/secrets from a dev checkout.
 config/config.ini
+config/certs/
+anycubic_slicer.*
 .env
 
 # VCS/tooling noise that would otherwise bloat the build context.
