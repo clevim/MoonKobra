@@ -1,0 +1,55 @@
+{
+    "type": "filament",
+    "name": "3DFila PLA Wood - Freixo",
+    "inherits": "Anycubic PLA @Anycubic Kobra X 0.4 nozzle",
+    "from": "User",
+    "instantiation": "true",
+    "is_custom_defined": "0",
+    "version": "2.4.2.0",
+    "filament_settings_id": [
+        "3DFila PLA Wood - Freixo"
+    ],
+    "filament_id": "Pc48d74d",
+    "filament_vendor": [
+        "3DFila"
+    ],
+    "filament_type": [
+        "PLA"
+    ],
+    "filament_density": [
+        "1.22"
+    ],
+    "nozzle_temperature": [
+        "215"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "220"
+    ],
+    "nozzle_temperature_range_low": [
+        "200"
+    ],
+    "nozzle_temperature_range_high": [
+        "230"
+    ],
+    "hot_plate_temp": [
+        "55"
+    ],
+    "hot_plate_temp_initial_layer": [
+        "55"
+    ],
+    "textured_plate_temp": [
+        "55"
+    ],
+    "textured_plate_temp_initial_layer": [
+        "55"
+    ],
+    "filament_cost": [
+        "138.9"
+    ],
+    "default_filament_colour": [
+        "#D5BC99"
+    ],
+    "filament_notes": [
+        "Gerado por MoonKobra profiles/brasil. Fonte: 3dfila.com.br - PLA Madeira: bico 200-230, mesa 45-60, 1,20-1,25 g/cm3 | Cor: HEX oficial 3DFila (Pantone 467 C) | Preço 1 kg: R$ 138,90 em 2026-10-04 | https://3dfila.com.br/produto/filamento-pla-madeira-de-freixo-175mm/"
+    ]
+}

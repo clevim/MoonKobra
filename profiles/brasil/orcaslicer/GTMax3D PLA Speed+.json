@@ -1,0 +1,49 @@
+{
+    "type": "filament",
+    "name": "GTMax3D PLA Speed+",
+    "inherits": "Anycubic PLA High Speed @Anycubic Kobra X 0.4 nozzle",
+    "from": "User",
+    "instantiation": "true",
+    "is_custom_defined": "0",
+    "version": "2.4.2.0",
+    "filament_settings_id": [
+        "GTMax3D PLA Speed+"
+    ],
+    "filament_id": "Pa2733ac",
+    "filament_vendor": [
+        "GTMax3D"
+    ],
+    "filament_type": [
+        "PLA"
+    ],
+    "filament_density": [
+        "1.24"
+    ],
+    "nozzle_temperature": [
+        "215"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "220"
+    ],
+    "nozzle_temperature_range_low": [
+        "190"
+    ],
+    "nozzle_temperature_range_high": [
+        "220"
+    ],
+    "hot_plate_temp": [
+        "60"
+    ],
+    "hot_plate_temp_initial_layer": [
+        "60"
+    ],
+    "textured_plate_temp": [
+        "60"
+    ],
+    "textured_plate_temp_initial_layer": [
+        "60"
+    ],
+    "filament_notes": [
+        "Gerado por MoonKobra profiles/brasil. Fonte: gtmax3d.com.br - PLA Speed+: bico 190-220, 80-500 mm/s"
+    ]
+}

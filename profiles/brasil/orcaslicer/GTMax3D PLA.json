@@ -1,0 +1,49 @@
+{
+    "type": "filament",
+    "name": "GTMax3D PLA",
+    "inherits": "Anycubic PLA @Anycubic Kobra X 0.4 nozzle",
+    "from": "User",
+    "instantiation": "true",
+    "is_custom_defined": "0",
+    "version": "2.4.2.0",
+    "filament_settings_id": [
+        "GTMax3D PLA"
+    ],
+    "filament_id": "P16aa0b2",
+    "filament_vendor": [
+        "GTMax3D"
+    ],
+    "filament_type": [
+        "PLA"
+    ],
+    "filament_density": [
+        "1.24"
+    ],
+    "nozzle_temperature": [
+        "205"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "210"
+    ],
+    "nozzle_temperature_range_low": [
+        "190"
+    ],
+    "nozzle_temperature_range_high": [
+        "220"
+    ],
+    "hot_plate_temp": [
+        "60"
+    ],
+    "hot_plate_temp_initial_layer": [
+        "60"
+    ],
+    "textured_plate_temp": [
+        "60"
+    ],
+    "textured_plate_temp_initial_layer": [
+        "60"
+    ],
+    "filament_notes": [
+        "Gerado por MoonKobra profiles/brasil. Fonte: gtmax3d.com.br - PLA: bico 190-220, mesa 0-60"
+    ]
+}

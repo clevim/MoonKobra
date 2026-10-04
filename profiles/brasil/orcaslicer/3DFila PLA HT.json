@@ -1,0 +1,58 @@
+{
+    "type": "filament",
+    "name": "3DFila PLA HT",
+    "inherits": "Anycubic PLA @Anycubic Kobra X 0.4 nozzle",
+    "from": "User",
+    "instantiation": "true",
+    "is_custom_defined": "0",
+    "version": "2.4.2.0",
+    "filament_settings_id": [
+        "3DFila PLA HT"
+    ],
+    "filament_id": "Pb40bcf6",
+    "filament_vendor": [
+        "3DFila"
+    ],
+    "filament_type": [
+        "PLA"
+    ],
+    "filament_density": [
+        "1.24"
+    ],
+    "nozzle_temperature": [
+        "215"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "220"
+    ],
+    "nozzle_temperature_range_low": [
+        "200"
+    ],
+    "nozzle_temperature_range_high": [
+        "230"
+    ],
+    "hot_plate_temp": [
+        "60"
+    ],
+    "hot_plate_temp_initial_layer": [
+        "60"
+    ],
+    "textured_plate_temp": [
+        "60"
+    ],
+    "textured_plate_temp_initial_layer": [
+        "60"
+    ],
+    "fan_min_speed": [
+        "50"
+    ],
+    "fan_max_speed": [
+        "100"
+    ],
+    "filament_cost": [
+        "109.9"
+    ],
+    "filament_notes": [
+        "Gerado por MoonKobra profiles/brasil. Fonte: 3dfila.com.br - PLA HT (recozível): sem temperatura de impressão publicada; defaults do PLA — calibrar (a peça pode ser recozida à parte)"
+    ]
+}

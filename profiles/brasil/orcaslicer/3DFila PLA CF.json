@@ -1,0 +1,52 @@
+{
+    "type": "filament",
+    "name": "3DFila PLA CF",
+    "inherits": "Anycubic PLA @Anycubic Kobra X 0.4 nozzle",
+    "from": "User",
+    "instantiation": "true",
+    "is_custom_defined": "0",
+    "version": "2.4.2.0",
+    "filament_settings_id": [
+        "3DFila PLA CF"
+    ],
+    "filament_id": "Pb26ab8b",
+    "filament_vendor": [
+        "3DFila"
+    ],
+    "filament_type": [
+        "PLA"
+    ],
+    "filament_density": [
+        "1.22"
+    ],
+    "nozzle_temperature": [
+        "220"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "225"
+    ],
+    "nozzle_temperature_range_low": [
+        "210"
+    ],
+    "nozzle_temperature_range_high": [
+        "235"
+    ],
+    "hot_plate_temp": [
+        "60"
+    ],
+    "hot_plate_temp_initial_layer": [
+        "60"
+    ],
+    "textured_plate_temp": [
+        "60"
+    ],
+    "textured_plate_temp_initial_layer": [
+        "60"
+    ],
+    "filament_cost": [
+        "179.9"
+    ],
+    "filament_notes": [
+        "Gerado por MoonKobra profiles/brasil. Fonte: 3dfila.com.br - PLA CF (fibra de carbono, abrasivo): sem ficha técnica; defaults do PLA — use bico endurecido e calibre"
+    ]
+}

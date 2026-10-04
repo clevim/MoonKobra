@@ -1,0 +1,49 @@
+{
+    "type": "filament",
+    "name": "GTMax3D PETG",
+    "inherits": "Anycubic PETG @Anycubic Kobra X 0.4 nozzle",
+    "from": "User",
+    "instantiation": "true",
+    "is_custom_defined": "0",
+    "version": "2.4.2.0",
+    "filament_settings_id": [
+        "GTMax3D PETG"
+    ],
+    "filament_id": "P5e9a717",
+    "filament_vendor": [
+        "GTMax3D"
+    ],
+    "filament_type": [
+        "PETG"
+    ],
+    "filament_density": [
+        "1.27"
+    ],
+    "nozzle_temperature": [
+        "240"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "245"
+    ],
+    "nozzle_temperature_range_low": [
+        "225"
+    ],
+    "nozzle_temperature_range_high": [
+        "270"
+    ],
+    "hot_plate_temp": [
+        "85"
+    ],
+    "hot_plate_temp_initial_layer": [
+        "85"
+    ],
+    "textured_plate_temp": [
+        "85"
+    ],
+    "textured_plate_temp_initial_layer": [
+        "85"
+    ],
+    "filament_notes": [
+        "Gerado por MoonKobra profiles/brasil. Fonte: gtmax3d.com.br - PETG: bico 225-270, mesa 80-95"
+    ]
+}

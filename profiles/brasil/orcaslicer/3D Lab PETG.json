@@ -1,0 +1,49 @@
+{
+    "type": "filament",
+    "name": "3D Lab PETG",
+    "inherits": "Anycubic PETG @Anycubic Kobra X 0.4 nozzle",
+    "from": "User",
+    "instantiation": "true",
+    "is_custom_defined": "0",
+    "version": "2.4.2.0",
+    "filament_settings_id": [
+        "3D Lab PETG"
+    ],
+    "filament_id": "P00f3cb6",
+    "filament_vendor": [
+        "3D Lab"
+    ],
+    "filament_type": [
+        "PETG"
+    ],
+    "filament_density": [
+        "1.27"
+    ],
+    "nozzle_temperature": [
+        "245"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "250"
+    ],
+    "nozzle_temperature_range_low": [
+        "235"
+    ],
+    "nozzle_temperature_range_high": [
+        "255"
+    ],
+    "hot_plate_temp": [
+        "80"
+    ],
+    "hot_plate_temp_initial_layer": [
+        "80"
+    ],
+    "textured_plate_temp": [
+        "80"
+    ],
+    "textured_plate_temp_initial_layer": [
+        "80"
+    ],
+    "filament_notes": [
+        "Gerado por MoonKobra profiles/brasil. Fonte: 3dlab.com.br - PETG: bico 245 (235-255), mesa 70-85"
+    ]
+}

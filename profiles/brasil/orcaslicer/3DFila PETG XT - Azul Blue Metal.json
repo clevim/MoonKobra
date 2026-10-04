@@ -1,0 +1,61 @@
+{
+    "type": "filament",
+    "name": "3DFila PETG XT - Azul Blue Metal",
+    "inherits": "Anycubic PETG @Anycubic Kobra X 0.4 nozzle",
+    "from": "User",
+    "instantiation": "true",
+    "is_custom_defined": "0",
+    "version": "2.4.2.0",
+    "filament_settings_id": [
+        "3DFila PETG XT - Azul Blue Metal"
+    ],
+    "filament_id": "P2c06085",
+    "filament_vendor": [
+        "3DFila"
+    ],
+    "filament_type": [
+        "PETG"
+    ],
+    "filament_density": [
+        "1.27"
+    ],
+    "nozzle_temperature": [
+        "240"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "245"
+    ],
+    "nozzle_temperature_range_low": [
+        "220"
+    ],
+    "nozzle_temperature_range_high": [
+        "260"
+    ],
+    "hot_plate_temp": [
+        "80"
+    ],
+    "hot_plate_temp_initial_layer": [
+        "80"
+    ],
+    "textured_plate_temp": [
+        "80"
+    ],
+    "textured_plate_temp_initial_layer": [
+        "80"
+    ],
+    "fan_min_speed": [
+        "20"
+    ],
+    "fan_max_speed": [
+        "60"
+    ],
+    "filament_cost": [
+        "96.9"
+    ],
+    "default_filament_colour": [
+        "#21607A"
+    ],
+    "filament_notes": [
+        "Gerado por MoonKobra profiles/brasil. Fonte: 3dfila.com.br/categoria filamento-petg: bico 220-260, mesa 70-90, 1,25-1,29 g/cm3, ventoinha 20-60% | Cor: HEX oficial 3DFila (Pantone 77700 C) | Preço 1 kg: R$ 96,90 em 2026-10-04 | https://3dfila.com.br/produto/filamento-petg-azul/"
+    ]
+}

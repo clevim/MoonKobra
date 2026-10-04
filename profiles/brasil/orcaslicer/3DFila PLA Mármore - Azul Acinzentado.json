@@ -1,0 +1,61 @@
+{
+    "type": "filament",
+    "name": "3DFila PLA Mármore - Azul Acinzentado",
+    "inherits": "Anycubic PLA @Anycubic Kobra X 0.4 nozzle",
+    "from": "User",
+    "instantiation": "true",
+    "is_custom_defined": "0",
+    "version": "2.4.2.0",
+    "filament_settings_id": [
+        "3DFila PLA Mármore - Azul Acinzentado"
+    ],
+    "filament_id": "P8c9c7b4",
+    "filament_vendor": [
+        "3DFila"
+    ],
+    "filament_type": [
+        "PLA"
+    ],
+    "filament_density": [
+        "1.25"
+    ],
+    "nozzle_temperature": [
+        "210"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "215"
+    ],
+    "nozzle_temperature_range_low": [
+        "190"
+    ],
+    "nozzle_temperature_range_high": [
+        "230"
+    ],
+    "hot_plate_temp": [
+        "60"
+    ],
+    "hot_plate_temp_initial_layer": [
+        "60"
+    ],
+    "textured_plate_temp": [
+        "60"
+    ],
+    "textured_plate_temp_initial_layer": [
+        "60"
+    ],
+    "fan_min_speed": [
+        "60"
+    ],
+    "fan_max_speed": [
+        "100"
+    ],
+    "filament_cost": [
+        "149.9"
+    ],
+    "default_filament_colour": [
+        "#2457A7"
+    ],
+    "filament_notes": [
+        "Gerado por MoonKobra profiles/brasil. Fonte: 3dfila.com.br - PLA Mármore: fabricante não publica ficha técnica; defaults do PLA base — calibre bico/mesa na impressora | Cor: cor aproximada da foto do produto (a 3DFila não publica o HEX desta cor) | Preço 1 kg: R$ 149,90 em 2026-10-04 | https://3dfila.com.br/produto/filamento-pla-marmore-azul-acinzentado-175mm/"
+    ]
+}

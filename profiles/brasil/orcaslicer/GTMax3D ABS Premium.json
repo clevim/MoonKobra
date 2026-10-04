@@ -1,0 +1,49 @@
+{
+    "type": "filament",
+    "name": "GTMax3D ABS Premium",
+    "inherits": "Anycubic ABS @Anycubic Kobra X 0.4 nozzle",
+    "from": "User",
+    "instantiation": "true",
+    "is_custom_defined": "0",
+    "version": "2.4.2.0",
+    "filament_settings_id": [
+        "GTMax3D ABS Premium"
+    ],
+    "filament_id": "Pd8026bf",
+    "filament_vendor": [
+        "GTMax3D"
+    ],
+    "filament_type": [
+        "ABS"
+    ],
+    "filament_density": [
+        "1.05"
+    ],
+    "nozzle_temperature": [
+        "240"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "245"
+    ],
+    "nozzle_temperature_range_low": [
+        "220"
+    ],
+    "nozzle_temperature_range_high": [
+        "250"
+    ],
+    "hot_plate_temp": [
+        "105"
+    ],
+    "hot_plate_temp_initial_layer": [
+        "105"
+    ],
+    "textured_plate_temp": [
+        "105"
+    ],
+    "textured_plate_temp_initial_layer": [
+        "105"
+    ],
+    "filament_notes": [
+        "Gerado por MoonKobra profiles/brasil. Fonte: gtmax3d.com.br - ABS Premium: bico 220-250, mesa 100-110"
+    ]
+}
