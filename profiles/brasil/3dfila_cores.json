@@ -1,0 +1,2094 @@
+[
+ {
+  "linha": "PETG High Speed",
+  "cor": "Branco",
+  "hex": "#C3CAC3",
+  "hex_todos": [
+   "#C3CAC3"
+  ],
+  "pantone": [
+   "4176 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-high-speed-branco-175mm/",
+  "preco_kg": 109.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG High Speed",
+  "cor": "Prata",
+  "hex": "#81878A",
+  "hex_todos": [
+   "#81878A"
+  ],
+  "pantone": [
+   "6212 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-high-speed-prata-175mm/",
+  "preco_kg": 109.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG High Speed",
+  "cor": "Preto",
+  "hex": "#1B1B1B",
+  "hex_todos": [
+   "#1B1B1B"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-petg-high-speed-preto-175mm/",
+  "preco_kg": 109.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG High Speed",
+  "cor": "Transparente",
+  "hex": "#E9EDEE",
+  "hex_todos": [
+   "#E9EDEE"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-high-speed-transparente-175mm/",
+  "preco_kg": 109.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Amarelo",
+  "hex": "#F1C400",
+  "hex_todos": [
+   "#F1C400"
+  ],
+  "pantone": [
+   "7406 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-petg-xt-amarelo-175mm/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Azul Blue Metal",
+  "hex": "#21607A",
+  "hex_todos": [
+   "#21607A"
+  ],
+  "pantone": [
+   "77700 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-azul/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Azul Caneta",
+  "hex": "#005C92",
+  "hex_todos": [
+   "#005C92"
+  ],
+  "pantone": [
+   "7462 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-xt-azul-caneta-175mm/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Branco Snow White",
+  "hex": "#F4F4F2",
+  "hex_todos": [
+   "#F4F4F2"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-branco/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Branco Translúcido",
+  "hex": "#F4F4F2",
+  "hex_todos": [
+   "#F4F4F2"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-petg-xt-branco-translucido-175mm/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Cinza Gray Storm",
+  "hex": "#65696A",
+  "hex_todos": [
+   "#65696A"
+  ],
+  "pantone": [
+   "417 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-xt-cinza-gray-storm-175mm/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "ECO (cores mistas)",
+  "hex": "#2E3439",
+  "hex_todos": [
+   "#2E3439"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-eco-petg-xt/",
+  "preco_kg": 89.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Laranja",
+  "hex": "#EF2B13",
+  "hex_todos": [
+   "#EF2B13"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-xt-laranja-175mm/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Prata",
+  "hex": "#BFC3C6",
+  "hex_todos": [
+   "#BFC3C6"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-xt-prata-175mm/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Preto Black Night",
+  "hex": "#1B1B1B",
+  "hex_todos": [
+   "#1B1B1B"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-preto/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Roxo Titânio",
+  "hex": "#3F2A56",
+  "hex_todos": [
+   "#3F2A56"
+  ],
+  "pantone": [
+   "669 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-xt-roxo-175mm/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Transparente Glass Colorless",
+  "hex": "#E9EDEE",
+  "hex_todos": [
+   "#E9EDEE"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-transparente/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Verde",
+  "hex": "#009261",
+  "hex_todos": [
+   "#009261"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-xt-verde-175mm/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Verde Green Metal",
+  "hex": "#336054",
+  "hex_todos": [
+   "#336054"
+  ],
+  "pantone": [
+   "626 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-verde/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Vermelho Aranha",
+  "hex": "#B93C39",
+  "hex_todos": [
+   "#B93C39"
+  ],
+  "pantone": [
+   "7620 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-xt-vermelho-semaforo-175mm/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PETG XT",
+  "cor": "Vermelho Red Metal",
+  "hex": "#83342F",
+  "hex_todos": [
+   "#83342F"
+  ],
+  "pantone": [
+   "7623 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-petg-vermelho/",
+  "preco_kg": 96.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Amarelo",
+  "hex": "#B59B1C",
+  "hex_todos": [
+   "#B59B1C"
+  ],
+  "pantone": [
+   "104 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-amarelo/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Amêndoa",
+  "hex": "#DC905A",
+  "hex_todos": [
+   "#DC905A"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-amendoa-175mm/",
+  "preco_kg": 88.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Azul",
+  "hex": "#00678E",
+  "hex_todos": [
+   "#00678E"
+  ],
+  "pantone": [
+   "647C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-azul/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Azul Caneta",
+  "hex": "#0D4272",
+  "hex_todos": [
+   "#0D4272"
+  ],
+  "pantone": [
+   "638C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-azul-caneta/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Azul Claro",
+  "hex": "#00A3C2",
+  "hex_todos": [
+   "#00A3C2"
+  ],
+  "pantone": [
+   "638C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-azul-claro/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Azul Cobalto",
+  "hex": "#406880",
+  "hex_todos": [
+   "#406880"
+  ],
+  "pantone": [
+   "7699 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-azul-cobalto-175mm/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Branco",
+  "hex": "#CDD2CF",
+  "hex_todos": [
+   "#CDD2CF"
+  ],
+  "pantone": [
+   "663C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-branco/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Branco Gesso",
+  "hex": "#E2E5EE",
+  "hex_todos": [
+   "#E2E5EE"
+  ],
+  "pantone": [
+   "656C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-branco-gesso/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Bronze",
+  "hex": "#78583F",
+  "hex_todos": [
+   "#78583F"
+  ],
+  "pantone": [
+   "7568 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-bronze-175mm/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Caucasiano",
+  "hex": "#C9A992",
+  "hex_todos": [
+   "#C9A992"
+  ],
+  "pantone": [
+   "4665 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-caucasiano-175mm/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Champanhe",
+  "hex": "#B89D7B",
+  "hex_todos": [
+   "#B89D7B"
+  ],
+  "pantone": [
+   "6008 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-champagne-175mm/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Cinza",
+  "hex": "#56585D",
+  "hex_todos": [
+   "#56585D"
+  ],
+  "pantone": [
+   "425 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-cinza/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Cinza Prime",
+  "hex": "#A09F9C",
+  "hex_todos": [
+   "#A09F9C"
+  ],
+  "pantone": [
+   "425 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-cinza-prime/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Dourado",
+  "hex": "#9E8457",
+  "hex_todos": [
+   "#9E8457"
+  ],
+  "pantone": [
+   "5835 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-dourado/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "ECO (cores mistas)",
+  "hex": "#595D15",
+  "hex_todos": [
+   "#595D15"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-eco/",
+  "preco_kg": 89.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Laranja",
+  "hex": "#E16F24",
+  "hex_todos": [
+   "#E16F24"
+  ],
+  "pantone": [
+   "158 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-laranja/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Laranja Tijolo",
+  "hex": "#E38766",
+  "hex_todos": [
+   "#E38766"
+  ],
+  "pantone": [
+   "472 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-laranja-tijolo/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Lilás",
+  "hex": "#9099CA",
+  "hex_todos": [
+   "#9099CA"
+  ],
+  "pantone": [
+   "271C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-lilas-175mm/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Marrom Chocolate",
+  "hex": "#4F3126",
+  "hex_todos": [
+   "#4F3126"
+  ],
+  "pantone": [
+   "7596 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-marrom-chocolate-175mm/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Mármore",
+  "hex": "#A5B3BD",
+  "hex_todos": [
+   "#A5B3BD"
+  ],
+  "pantone": [
+   "536 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-marmore-175mm/",
+  "preco_kg": 134.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Mármore Preto",
+  "hex": "#3E4247",
+  "hex_todos": [
+   "#3E4247"
+  ],
+  "pantone": [
+   "Preto 7 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-marmore-preto-175mm/",
+  "preco_kg": 134.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Natural Transparente",
+  "hex": "#ABA79A",
+  "hex_todos": [
+   "#ABA79A"
+  ],
+  "pantone": [
+   "414 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-natural-transparente/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Prata",
+  "hex": "#BFC3C6",
+  "hex_todos": [
+   "#BFC3C6"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-prata/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Preto",
+  "hex": "#242322",
+  "hex_todos": [
+   "#242322"
+  ],
+  "pantone": [
+   "Neutral Black C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-preto/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Rosa",
+  "hex": "#D06797",
+  "hex_todos": [
+   "#D06797"
+  ],
+  "pantone": [
+   "7423 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-rosa/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Rosa Salmão",
+  "hex": "#B98E78",
+  "hex_todos": [
+   "#B98E78"
+  ],
+  "pantone": [
+   "4655 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-rosa-salmao/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Roxo",
+  "hex": "#523B71",
+  "hex_todos": [
+   "#523B71"
+  ],
+  "pantone": [
+   "269 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-roxo/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Verde",
+  "hex": "#78B635",
+  "hex_todos": [
+   "#78B635"
+  ],
+  "pantone": [
+   "368 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-verde/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Verde Escuro",
+  "hex": "#057240",
+  "hex_todos": [
+   "#057240"
+  ],
+  "pantone": [
+   "7732 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-verde-escuro/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Verde Grama",
+  "hex": "#47C691",
+  "hex_todos": [
+   "#47C691"
+  ],
+  "pantone": [
+   "354 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-verde-grama-175mm/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Verde Militar",
+  "hex": "#748F5B",
+  "hex_todos": [
+   "#748F5B"
+  ],
+  "pantone": [
+   "7491 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-verde-militar-175mm/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Vermelho",
+  "hex": "#83342F",
+  "hex_todos": [
+   "#83342F"
+  ],
+  "pantone": [
+   "7623 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-vermelho/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA",
+  "cor": "Vermelho Carros",
+  "hex": "#B93D3B",
+  "hex_todos": [
+   "#B93D3B"
+  ],
+  "pantone": [
+   "7620 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-vermelho-carros/",
+  "preco_kg": 99.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA EasyFill",
+  "cor": "Amarelo Sunshine",
+  "hex": "#F7D426",
+  "hex_todos": [
+   "#F7D426"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-amarelo-sunshine-easyfill-175mm/",
+  "preco_kg": 124.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA EasyFill",
+  "cor": "Azul Sky",
+  "hex": "#025B81",
+  "hex_todos": [
+   "#025B81"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-azul-sky-easyfill-175mm/",
+  "preco_kg": 124.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA EasyFill",
+  "cor": "Branco Pearl",
+  "hex": "#C1CACC",
+  "hex_todos": [
+   "#C1CACC"
+  ],
+  "pantone": [
+   "5527 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-branco-pearl-easyfill-175mm/",
+  "preco_kg": 124.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA EasyFill",
+  "cor": "ECO (cores mistas)",
+  "hex": "#376B69",
+  "hex_todos": [
+   "#376B69"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-easyfill-eco/",
+  "preco_kg": 104.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA EasyFill",
+  "cor": "Prata Machine",
+  "hex": "#73777A",
+  "hex_todos": [
+   "#73777A"
+  ],
+  "pantone": [
+   "Cool Gray 9 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-prata-machine-easyfill-175mm-copia/",
+  "preco_kg": 124.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA EasyFill",
+  "cor": "Preto Shadow",
+  "hex": "#302F2D",
+  "hex_todos": [
+   "#302F2D"
+  ],
+  "pantone": [
+   "Black2 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-preto-shadow-easyfill-175mm/",
+  "preco_kg": 124.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA EasyFill",
+  "cor": "Vermelho Cherry",
+  "hex": "#B24257",
+  "hex_todos": [
+   "#B24257"
+  ],
+  "pantone": [
+   "703 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-vermelho-cherry-easyfill-175mm/",
+  "preco_kg": 124.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Magic",
+  "cor": "Amarelo Neon",
+  "hex": "#CBEA26",
+  "hex_todos": [
+   "#CBEA26"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-magic-amarelo-neon-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Magic",
+  "cor": "Azul Marinho",
+  "hex": "#2A2A31",
+  "hex_todos": [
+   "#2A2A31"
+  ],
+  "pantone": [
+   "433 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-magic-azul-marinho-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Magic",
+  "cor": "Azul Royal",
+  "hex": "#192A37",
+  "hex_todos": [
+   "#192A37"
+  ],
+  "pantone": [
+   "433 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-magic-azul-royal-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Magic",
+  "cor": "ECO (cores mistas)",
+  "hex": "#595D15",
+  "hex_todos": [
+   "#595D15"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-magic-eco-175mm/",
+  "preco_kg": 89.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Magic",
+  "cor": "Magenta Ametista",
+  "hex": "#33242F",
+  "hex_todos": [
+   "#33242F"
+  ],
+  "pantone": [
+   "518C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-magic-magenta-ametista-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Magic",
+  "cor": "Preto",
+  "hex": "#2B2B2D",
+  "hex_todos": [
+   "#2B2B2D"
+  ],
+  "pantone": [
+   "426 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-magic-preto/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Magic",
+  "cor": "Vermelho Bordô",
+  "hex": "#412F30",
+  "hex_todos": [
+   "#412F30"
+  ],
+  "pantone": [
+   "7554C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-magic-vermelho-bordo-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Magic",
+  "cor": "Vermelho Neon",
+  "hex": "#D65D60",
+  "hex_todos": [
+   "#D65D60"
+  ],
+  "pantone": [
+   "1785C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-magic-vermelho-neon-175mm/",
+  "preco_kg": 109.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Matte",
+  "cor": "Azul Marinho",
+  "hex": "#515D6E",
+  "hex_todos": [
+   "#515D6E"
+  ],
+  "pantone": [
+   "7545 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-macaron-azul-marinho/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Matte",
+  "cor": "Branco",
+  "hex": "#D8DCDD",
+  "hex_todos": [
+   "#D8DCDD"
+  ],
+  "pantone": [
+   "663 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-matte-branco/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Matte",
+  "cor": "Macaron Amarelo",
+  "hex": "#C6C8A7",
+  "hex_todos": [
+   "#C6C8A7"
+  ],
+  "pantone": [
+   "5797 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-macaron-amarelo/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Matte",
+  "cor": "Macaron Azul",
+  "hex": "#AAC0C4",
+  "hex_todos": [
+   "#AAC0C4"
+  ],
+  "pantone": [
+   "5513 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-macaron-azul/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Matte",
+  "cor": "Macaron Rosa",
+  "hex": "#CEA0AB",
+  "hex_todos": [
+   "#CEA0AB"
+  ],
+  "pantone": [
+   "693 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-macaron-rosa/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Matte",
+  "cor": "Macaron Verde",
+  "hex": "#A2C3B1",
+  "hex_todos": [
+   "#A2C3B1"
+  ],
+  "pantone": [
+   "558 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-macaron-verde/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Matte",
+  "cor": "Preto",
+  "hex": "#373636",
+  "hex_todos": [
+   "#373636"
+  ],
+  "pantone": [
+   "447 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-matte-preto/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Matte",
+  "cor": "Rainbow",
+  "hex": "#6FACB6",
+  "hex_todos": [
+   "#6FACB6",
+   "#A9B1C6",
+   "#B5AFA5",
+   "#9FC688"
+  ],
+  "pantone": [
+   "549 C",
+   "5295 C",
+   "7535 C",
+   "359 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-matte-rainbow/",
+  "preco_kg": 139.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Matte",
+  "cor": "Verde Oliva",
+  "hex": "#545B47",
+  "hex_todos": [
+   "#545B47"
+  ],
+  "pantone": [
+   "7763 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-macaron-verde-oliva/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Amarelo",
+  "hex": "#C3BB6C",
+  "hex_todos": [
+   "#C3BB6C"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-amarelo-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Amarelo e Verde",
+  "hex": "#5EAA55",
+  "hex_todos": [
+   "#5EAA55"
+  ],
+  "pantone": [
+   "360 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-amarelo-e-verde/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Azul",
+  "hex": "#2572B2",
+  "hex_todos": [
+   "#2572B2"
+  ],
+  "pantone": [
+   "647 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-azul-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Azul Claro",
+  "hex": "#1DA4DA",
+  "hex_todos": [
+   "#1DA4DA"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-azul-claro-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Azul Claro e Verde",
+  "hex": "#006C90",
+  "hex_todos": [
+   "#006C90",
+   "#47884A"
+  ],
+  "pantone": [
+   "7706 C",
+   "7740 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-azul-claro-e-verde/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Azul, Prata e Rosa",
+  "hex": "#9AADCB",
+  "hex_todos": [
+   "#9AADCB",
+   "#0162D3",
+   "#C17BC1"
+  ],
+  "pantone": [
+   "7681 C",
+   "2387 C",
+   "6079 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-tricolor-azul-prata-e-rosa/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Bronze",
+  "hex": "#9E9361",
+  "hex_todos": [
+   "#9E9361"
+  ],
+  "pantone": [
+   "5835 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-bronze-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Cobre",
+  "hex": "#A35C48",
+  "hex_todos": [
+   "#A35C48"
+  ],
+  "pantone": [
+   "7585 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-cobre-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Laranja",
+  "hex": "#C6906B",
+  "hex_todos": [
+   "#C6906B"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-laranja-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Laranja, Azul e Verde",
+  "hex": "#0A7696",
+  "hex_todos": [
+   "#0A7696"
+  ],
+  "pantone": [
+   "633 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-tricolor-laranja-azul-e-verde/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Ouro",
+  "hex": "#C89343",
+  "hex_todos": [
+   "#C89343"
+  ],
+  "pantone": [
+   "7412 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-ouro-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Ouro e Cobre",
+  "hex": "#C16C4E",
+  "hex_todos": [
+   "#C16C4E"
+  ],
+  "pantone": [
+   "7618 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-ouro-e-cobre/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Ouro e Prata",
+  "hex": "#A9923F",
+  "hex_todos": [
+   "#A9923F"
+  ],
+  "pantone": [
+   "7754 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-ouro-e-prata/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Ouro, Prata e Cobre",
+  "hex": "#806533",
+  "hex_todos": [
+   "#806533"
+  ],
+  "pantone": [
+   "140 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-tricolor-ouro-prata-e-cobre/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Prata",
+  "hex": "#969CA2",
+  "hex_todos": [
+   "#969CA2"
+  ],
+  "pantone": [
+   "443 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-prata-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Preto",
+  "hex": "#1B1B1B",
+  "hex_todos": [
+   "#1B1B1B"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-preto-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Preto e Dourado",
+  "hex": "#5D6165",
+  "hex_todos": [
+   "#5D6165",
+   "#98904E"
+  ],
+  "pantone": [
+   "Cool",
+   "5767 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-preto-e-dourado/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Preto e Roxo",
+  "hex": "#1B282A",
+  "hex_todos": [
+   "#1B282A",
+   "#A379C8"
+  ],
+  "pantone": [
+   "419 C",
+   "2655 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-preto-e-roxo/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Preto e Verde Escuro",
+  "hex": "#454948",
+  "hex_todos": [
+   "#454948",
+   "#32766F"
+  ],
+  "pantone": [
+   "446 C",
+   "5545 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-preto-e-verde-escuro/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Preto e Vermelho",
+  "hex": "#38383A",
+  "hex_todos": [
+   "#38383A",
+   "#AB5258"
+  ],
+  "pantone": [
+   "412 C",
+   "7419 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-preto-e-vermelho/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Preto, Roxo e Azul",
+  "hex": "#4D4D4B",
+  "hex_todos": [
+   "#4D4D4B",
+   "#7C5D9D",
+   "#2C5E8B"
+  ],
+  "pantone": [
+   "446 C",
+   "7661 C",
+   "7685 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-tricolor-preto-roxo-e-azul/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Preto, Roxo e Dourado",
+  "hex": "#464747",
+  "hex_todos": [
+   "#464747",
+   "#6E5279",
+   "#A9964C"
+  ],
+  "pantone": [
+   "446 C",
+   "668 C",
+   "4505 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-tricolor-preto-roxo-e-dourado/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Preto, Vermelho, Dourado",
+  "hex": "#2A2228",
+  "hex_todos": [
+   "#2A2228"
+  ],
+  "pantone": [
+   "Preto Neutro C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-tricolor-preto-vermelho-e-dourado/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Rainbow",
+  "hex": "#566B87",
+  "hex_todos": [
+   "#566B87",
+   "#509D8F",
+   "#82A770",
+   "#9D8B50",
+   "#6F3154"
+  ],
+  "pantone": [
+   "5405 C",
+   "77723 C",
+   "5773 C",
+   "4505 C",
+   "7642 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-rainbow/",
+  "preco_kg": 139.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Rosa",
+  "hex": "#DB8998",
+  "hex_todos": [
+   "#DB8998"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-rosa-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Roxo",
+  "hex": "#7E5C9E",
+  "hex_todos": [
+   "#7E5C9E"
+  ],
+  "pantone": [
+   "2587 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-roxo-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Roxo e Dourado",
+  "hex": "#7E4880",
+  "hex_todos": [
+   "#7E4880",
+   "#AF9043"
+  ],
+  "pantone": [
+   "7662 C",
+   "618 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-roxo-e-dourado/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Roxo e Verde",
+  "hex": "#715081",
+  "hex_todos": [
+   "#715081",
+   "#528D4B"
+  ],
+  "pantone": [
+   "7447 C",
+   "7741 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-roxo-e-verde/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Roxo, Laranja, Azul Celeste",
+  "hex": "#4B2E55",
+  "hex_todos": [
+   "#4B2E55",
+   "#9D6137",
+   "#53A9AE"
+  ],
+  "pantone": [
+   "262 C",
+   "4266 C",
+   "2233 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-tricolor-roxo-laranja-azul-celeste/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Verde",
+  "hex": "#386855",
+  "hex_todos": [
+   "#386855"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-verde-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Verde, Dourado e Laranja",
+  "hex": "#3E853D",
+  "hex_todos": [
+   "#3E853D"
+  ],
+  "pantone": [
+   "7739 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-tricolor-verde-dourado-e-laranja/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Vermelho",
+  "hex": "#91373E",
+  "hex_todos": [
+   "#91373E"
+  ],
+  "pantone": [
+   "194 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-vermelho-175mm/",
+  "preco_kg": 100.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Vermelho Rosado e Azul",
+  "hex": "#4E94BE",
+  "hex_todos": [
+   "#4E94BE"
+  ],
+  "pantone": [
+   "7688 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-vermelho-rosado-e-azul-celeste/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Vermelho e Azul",
+  "hex": "#BC004A",
+  "hex_todos": [
+   "#BC004A",
+   "#0443B4"
+  ],
+  "pantone": [
+   "1935 C",
+   "2728 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-vermelho-e-azul/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Vermelho e Dourado",
+  "hex": "#E31D1F",
+  "hex_todos": [
+   "#E31D1F"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-vermelho-e-dourado/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Vermelho e Verde",
+  "hex": "#5BA057",
+  "hex_todos": [
+   "#5BA057"
+  ],
+  "pantone": [
+   "7738 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-duo-vermelho-e-verde/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Vermelho, Amarelo e Azul",
+  "hex": "#004771",
+  "hex_todos": [
+   "#004771"
+  ],
+  "pantone": [
+   "302 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-tricolor-vermelho-amarelo-e-azul/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Vermelho, Azul e Verde",
+  "hex": "#7A3F61",
+  "hex_todos": [
+   "#7A3F61"
+  ],
+  "pantone": [
+   "7642 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-tricolor-vermelho-azul-e-verde/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Silk",
+  "cor": "Vermelho, Dourado e Roxo",
+  "hex": "#C0934F",
+  "hex_todos": [
+   "#C0934F"
+  ],
+  "pantone": [
+   "7510 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-silk-tricolor-vermelho-dourado-e-roxo/",
+  "preco_kg": 119.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Wood",
+  "cor": "Carvalho",
+  "hex": "#A38473",
+  "hex_todos": [
+   "#A38473"
+  ],
+  "pantone": [
+   "7504 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-wood-madeira-carvalho-175mm/",
+  "preco_kg": 138.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Wood",
+  "cor": "Freixo",
+  "hex": "#D5BC99",
+  "hex_todos": [
+   "#D5BC99"
+  ],
+  "pantone": [
+   "467 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-madeira-de-freixo-175mm/",
+  "preco_kg": 138.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Wood",
+  "cor": "Jacarandá",
+  "hex": "#604442",
+  "hex_todos": [
+   "#604442"
+  ],
+  "pantone": [
+   "7595 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-wood-madeira-de-jacaranda-175mm/",
+  "preco_kg": 138.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Wood",
+  "cor": "Marrom Wood",
+  "hex": "#727064",
+  "hex_todos": [
+   "#727064"
+  ],
+  "pantone": [
+   "531 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-marrom-wood-easyfill-175mm/",
+  "preco_kg": 124.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Wood",
+  "cor": "Natural",
+  "hex": "#AE9C7F",
+  "hex_todos": [
+   "#AE9C7F"
+  ],
+  "pantone": [
+   "7503 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-wood-madeira-netural-175mm/",
+  "preco_kg": 138.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Wood",
+  "cor": "Noz",
+  "hex": "#7A4B48",
+  "hex_todos": [
+   "#7A4B48"
+  ],
+  "pantone": [
+   "7595 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-wood-madeira-noz-175mm/",
+  "preco_kg": 138.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Wood",
+  "cor": "Pinus",
+  "hex": "#D3BFA2",
+  "hex_todos": [
+   "#D3BFA2"
+  ],
+  "pantone": [
+   "4545 C"
+  ],
+  "oficial": true,
+  "estoque": false,
+  "url": "https://3dfila.com.br/produto/filamento-pla-madeira-pinus-175mm/",
+  "preco_kg": 138.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "PLA Wood",
+  "cor": "Teca",
+  "hex": "#9A694A",
+  "hex_todos": [
+   "#9A694A"
+  ],
+  "pantone": [
+   "525 C"
+  ],
+  "oficial": true,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-pla-wood-madeira-teca-175mm/",
+  "preco_kg": 138.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "TPU Flex",
+  "cor": "Amarelo",
+  "hex": "#F5B509",
+  "hex_todos": [
+   "#F5B509"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-tpu-flex-amarelo/",
+  "preco_kg": 147.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "TPU Flex",
+  "cor": "Azul Pedra",
+  "hex": "#06438F",
+  "hex_todos": [
+   "#06438F"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-tpu-flex-azul-pedra/",
+  "preco_kg": 147.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "TPU Flex",
+  "cor": "Branco",
+  "hex": "#F4F4F2",
+  "hex_todos": [
+   "#F4F4F2"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-tpu-flex-branco/",
+  "preco_kg": 147.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "TPU Flex",
+  "cor": "Cinza",
+  "hex": "#8C8F92",
+  "hex_todos": [
+   "#8C8F92"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-tpu-flex-cinza/",
+  "preco_kg": 147.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "TPU Flex",
+  "cor": "Preto",
+  "hex": "#1B1B1B",
+  "hex_todos": [
+   "#1B1B1B"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-tpu-flex/",
+  "preco_kg": 147.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "TPU Flex",
+  "cor": "Transparente",
+  "hex": "#E9EDEE",
+  "hex_todos": [
+   "#E9EDEE"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-tpu-flex-transparente/",
+  "preco_kg": 147.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "TPU Flex",
+  "cor": "Verde Bambu",
+  "hex": "#04A73E",
+  "hex_todos": [
+   "#04A73E"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-tpu-flex-verde-bambu/",
+  "preco_kg": 147.9,
+  "preco_data": "2026-09-24"
+ },
+ {
+  "linha": "TPU Flex",
+  "cor": "Vermelho",
+  "hex": "#DF171F",
+  "hex_todos": [
+   "#DF171F"
+  ],
+  "pantone": [],
+  "oficial": false,
+  "estoque": true,
+  "url": "https://3dfila.com.br/produto/filamento-tpu-flex-vermelho/",
+  "preco_kg": 147.9,
+  "preco_data": "2026-09-24"
+ }
+]

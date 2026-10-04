@@ -36,8 +36,8 @@ engineering for interoperability):
   Anycubic's and are not distributed here.)
 
 - **MQTT protocol structures, payload formats and signature algorithms** —
-  reverse-engineered from `Workbench.dll` / `cloud_mqtt.dll` of the Anycubic
-  Slicer Next application. Any reproduction of code or
+  reverse-engineered from the Vue project embedded in `libWorkbench.so` of the
+  Anycubic Slicer Next application. Any reproduction of code or
   protocol details serves interoperability only.
 
 - **AMS material naming, slot numbering, GCode markers (`EXCLUDE_OBJECT_*`)**

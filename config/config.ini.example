@@ -1,0 +1,142 @@
+# Arquivo de configuração do MoonKobra
+# O normal é não editar à mão: "Adicionar impressora" na interface preenche a
+# conexão, e o resto se ajusta em Configurações. Para preencher à mão, copie
+# este arquivo para config/config.ini:
+#   cp config.ini.example config/config.ini
+#
+# Credenciais buscadas na impressora e gravadas aqui automaticamente:
+#   python3 fetch_credentials.py --ip 192.168.x.x --write-config
+
+[connection]
+# IP da impressora na rede local
+printer_ip   = 192.168.x.x
+
+# Porta MQTT (padrão da Anycubic Kobra X: 9883)
+mqtt_port    = 9883
+
+# Credenciais MQTT (de cada impressora, começam com "user")
+username     = userXXXXXXXXXX
+password     = XXXXXXXXXXXXXXX
+
+# ID do dispositivo (32 caracteres hexadecimais, de cada impressora)
+device_id    = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# ID do modelo (padrão da Kobra X: 20030)
+mode_id      = 20030
+
+# ─── Certificado da impressora ────────────────────────────────────────────────
+# A conexão MQTT usa o certificado TLS que a própria impressora gera e entrega
+# pela rede local. O MoonKobra busca na primeira conexão e salva em
+#   config/certs/<device_id>.crt  e  config/certs/<device_id>.key
+# Se a impressora recusar o salvo, ele busca outro sozinho. Para resetar à mão
+# (ex.: troca de impressora ou reset de fábrica), apague a pasta config/certs/
+# e reinicie o MoonKobra.
+
+[print]
+# Slot do AMS padrão para impressão de uma cor (auto = todos os ocupados, 0-3 = slot fixo)
+default_ams_slot = auto
+
+# Nivelamento automático antes de cada impressão (1 = ligado, 0 = desligado)
+auto_leveling    = 1
+
+# Ligar a câmera ao começar a impressão (1 = ligado, 0 = desligado)
+camera_on_print  = 0
+
+# Aviso antes de imprimir arquivos enviados pela web (1 = ligado, 0 = desligado)
+web_upload_warning = 1
+
+# Depois do upload, abrir a escolha de filamento/cor (1 = ligado, 0 = desligado)
+print_start_dialog = 1
+
+# ─── Perfil de filamento por slot do AMS (opcional) ──────────────────────────
+# Na sincronização, o OrcaSlicer usa "Generic PLA/PETG/..." por padrão. Com
+# estes mapeamentos o bridge envia o ID do filamento do Orca + o fabricante
+# (no fatiador aparece, por exemplo, "PolyTerra PLA — Polymaker" em vez de só
+# "Generic PLA"). O mapeamento é feito pela interface. Exemplo:
+#   [filament_profiles]
+#   slot_0_id     = OGFL01
+#   slot_0_vendor = Polymaker
+#   slot_1_id     = OGFG23
+#   slot_1_vendor = Polymaker
+
+[bridge]
+# Intervalo de consulta à impressora, em segundos
+poll_interval    = 3
+# Logs de impressão (Log → Histórico): quantos guardar (0 = desligado), quantas
+# linhas de antes do início entram junto, e o tamanho do log ao vivo.
+# job_log_keep          = 100
+# job_log_context_lines = 200
+# log_buffer_lines      = 500
+
+# ─── Login ────────────────────────────────────────────────────────────────────
+# Vem ligado: no primeiro start o MoonKobra cria kx / kx123 e exige trocar a
+# senha no primeiro acesso. Dá para desligar em Configurações → Sistema.
+# [auth]
+# user     = kx
+# # Hash da senha (texto puro também funciona, mas fica legível em backups):
+# #   python3 auth.py MinhaSenha
+# password = scrypt$....$....
+# # Chave para OrcaSlicer / moonraker-obico, que a enviam no header X-Api-Key:
+# api_key  = alguma-sequencia-longa-e-aleatoria
+
+# ─── Spoolman (opcional) ──────────────────────────────────────────────────────
+# Acompanha o consumo de filamento por slot do AMS e desconta do carretel
+# certo (em mm, como o Moonraker; o Spoolman converte para gramas).
+# [spoolman]
+# # URL do Spoolman (alcançável a partir do container do bridge):
+# server    = http://192.168.x.x:7912
+# # 0 = só desconta no fim da impressão, >0 = a cada N segundos durante ela:
+# sync_rate = 0
+#
+# A associação slot → carretel é feita pela interface e salva por impressora
+# automaticamente (não preencha à mão):
+#   Uma impressora : [spoolman]   slot_spools = 0:42,1:17
+#   Várias         : [spoolman_1] slot_spools = 0:42,1:17
+#                    [spoolman_2] slot_spools = 0:5,1:6
+
+# ─── Várias impressoras (opcional) ────────────────────────────────────────────
+# Cada impressora vira uma seção [printer_1], [printer_2], … com a própria
+# porta. O normal é usar "Adicionar impressora" na interface. Exemplo:
+# [printer_1]
+# name         = Kobra X Esquerda
+# printer_ip   = 192.168.1.50
+# mqtt_port    = 9883
+# username     = userXXXXXXXXXX
+# password     = XXXXXXXXXXXXXXX
+# device_id    = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# mode_id      = 20030
+#
+# [printer_2]
+# name         = Kobra X Direita
+# printer_ip   = 192.168.1.51
+# mqtt_port    = 9883
+# username     = userYYYYYYYYYY
+# password     = YYYYYYYYYYYYYYY
+# device_id    = yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+# mode_id      = 20030
+
+[ace_dry_presets]
+# Presets do secador do ACE (temperatura em °C, duração em segundos)
+pla_temp = 45
+pla_duration_sec = 14400
+pla_plus_temp = 45
+pla_plus_duration_sec = 14400
+petg_temp = 50
+petg_duration_sec = 14400
+tpu_temp = 55
+tpu_duration_sec = 14400
+abs_asa_temp = 45
+abs_asa_duration_sec = 28800
+pa_pc_temp = 55
+pa_pc_duration_sec = 43200
+
+# Presets próprios (nome + temperatura + duração)
+custom_1_name = Custom 1
+custom_1_temp = 45
+custom_1_duration_sec = 14400
+custom_2_name = Custom 2
+custom_2_temp = 45
+custom_2_duration_sec = 14400
+custom_3_name = Custom 3
+custom_3_temp = 45
+custom_3_duration_sec = 14400
