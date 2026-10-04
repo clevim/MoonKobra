@@ -28,9 +28,11 @@ jobs:
       - name: Resolve version from the tag
         id: ver
         run: |
-          TAG="${{ github.event.inputs.tag || github.ref_name }}"
-          echo "tag=$TAG"            >> "$GITHUB_OUTPUT"
-          echo "version=${TAG#v}"    >> "$GITHUB_OUTPUT"
+          RAW="${{ github.event.inputs.tag || github.ref_name }}"
+          # strip anything before the first digit (v, v., stray spaces) -> clean X.Y.Z
+          VERSION="$(printf '%s' "$RAW" | sed -E 's/^[^0-9]*//')"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION"    >> "$GITHUB_OUTPUT"
 
       - name: VERSION file must match the tag
         run: |
