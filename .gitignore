@@ -32,6 +32,16 @@ config/certs/
 anycubic_slicer.crt
 anycubic_slicer.key
 
+# Rede de segurança: nenhum certificado/chave privada deve ir ao repo, em pasta alguma.
+*.crt
+*.key
+*.pem
+
 # venv local
 .venv/
 .pytest_cache/
+
+# Testes — só desenvolvimento local, fora do repositório público
+tests/
+pytest.ini
+requirements-test.txt
