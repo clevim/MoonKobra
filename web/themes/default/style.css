@@ -608,6 +608,26 @@ details.log-data pre{margin-top:4px;padding:8px 10px;background:var(--panel);bor
 .field-label{margin-bottom:8px}
 .callout{padding:10px 12px;border-radius:var(--r-sm);font-size:13px;background:color-mix(in srgb,var(--warn) 12%,transparent);border:1px solid color-mix(in srgb,var(--warn) 45%,transparent);color:var(--ink)}
 .panel-box{padding:12px;background:var(--well);border:1px solid var(--rule);border-radius:var(--r-sm)}
+/* Primeira execução */
+.setup-hello{display:flex;align-items:center;gap:14px}
+.setup-hello .moko-card{width:72px;height:72px;flex:none}
+.setup-title{font-size:21px;font-weight:650;line-height:1.2;margin-top:4px}
+/* Guia do OrcaSlicer: réplica da janela "Physical Printer", só o que preencher em laranja */
+.og-win{background:var(--well);border:1px solid var(--rule-2);border-radius:var(--r-sm);font-size:13px}
+.og-bar{padding:7px 12px;border-bottom:1px solid var(--rule);color:var(--ink-3);text-align:center;font-size:12px}
+.og-row{display:grid;grid-template-columns:150px minmax(0,1fr);align-items:center;gap:10px;padding:6px 12px}
+.og-row+.og-row{border-top:1px solid var(--rule)}
+.og-lbl{color:var(--ink-2)}
+.og-val{display:flex;align-items:center;gap:8px;min-width:0;min-height:34px}
+.og-fill{padding:0 4px 0 8px;border:1px solid var(--orange);border-radius:var(--r-sm);font-family:var(--mono);font-size:12px}
+.og-fill input{flex:1;min-width:0;border:0;background:none;padding:0;height:32px;font-family:var(--mono);font-size:12px;color:var(--ink)}
+.og-fill .icon-btn{height:28px;min-width:28px;border:0}
+.og-skip{color:var(--ink-3);font-style:italic}
+.og-n{display:inline-grid;place-items:center;flex:none;width:18px;height:18px;border-radius:50%;background:var(--orange);color:var(--orange-ink);font:700 11px/1 inherit;font-family:inherit;font-style:normal}
+.og-foot{display:flex;justify-content:flex-end;gap:8px;padding:8px 12px;border-top:1px solid var(--rule)}
+.og-btn{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border:1px solid var(--rule-2);border-radius:var(--r-sm);color:var(--ink-2)}
+.og-never{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);cursor:pointer}
+@media (max-width:520px){.og-row{grid-template-columns:minmax(0,1fr);gap:4px}}
 .ace-dry-preset-btn{height:38px;border-radius:var(--r-sm);border:1px solid var(--rule-2);background:transparent;color:var(--ink-2);cursor:pointer;font-size:13px;font-weight:600}
 .ace-dry-preset-btn.active{background:var(--ink);color:var(--ground);border-color:var(--ink)}
 .pcr-app{border-radius:var(--r)!important}

@@ -108,7 +108,19 @@ filament, done, or asleep when the printer is off.
 Printer screen → Settings → Enable LAN mode.
 
 **2. Start MoonKobra.**
-There is no published image yet, so Docker builds it from this folder:
+
+*On Windows (easiest, nothing to install):*
+1. Download `MoonKobra-…-windows.exe` from the [latest release](https://github.com/clevim/MoonKobra/releases/latest).
+2. Put it in a folder of its own, e.g. `Documents\MoonKobra`. Settings and
+   files are kept in that folder, next to the `.exe`.
+3. Double-click it. If Windows shows *"Windows protected your PC"*, click
+   **More info → Run anyway**. If the firewall asks, tick **Private networks**
+   and click **Allow**.
+4. The browser opens on the dashboard by itself. The black window is MoonKobra
+   running: **closing that window stops everything**. To start it again,
+   double-click the `.exe`.
+
+*With Docker (Linux, NAS, server):* Docker builds it from this folder:
 
 ```bash
 git clone https://github.com/clevim/MoonKobra.git
@@ -122,7 +134,8 @@ The first login is `kx` / `kx123`, and you will be asked to choose a new
 password right away.
 
 **4. Add the printer.**
-In *Printers*, click *Add printer* and type the printer's IP. Username,
+On first run the dashboard asks only for the printer's IP and the language.
+More printers are added later in *Printers → Add printer*. Username,
 password, device ID and the printer's own TLS certificate are read from the
 printer automatically. The certificate is saved in `config/certs/`; delete that
 folder to fetch it again.
@@ -131,6 +144,8 @@ folder to fetch it again.
 Printer → Connection → type **Moonraker**, host `http://HOST-IP:7125` (with
 `http://` and the port). Paste the API key from *Settings → API* into the
 API key field.
+The dashboard shows this walkthrough with your values filled in (also under
+*Settings → API → How to connect OrcaSlicer*).
 
 > More than one printer? Add it the same way: each one gets its own port
 > (7125, 7126, …).

@@ -50,6 +50,16 @@ engineering for interoperability):
   profile index `data/orca_filaments.json` — derived from the public
   [OrcaSlicer](https://github.com/SoftFever/OrcaSlicer) presets, which are
   licensed under the **GNU AGPL v3.0**; these files stay under AGPL-3.0.
+- **FFmpeg** — the Docker image and the Windows `.exe` include the static
+  `ffmpeg` binary shipped by [imageio-ffmpeg](https://github.com/imageio/imageio-ffmpeg)
+  (BSD-2-Clause wrapper), used for the camera stream. FFmpeg itself is built with
+  `--enable-gpl --enable-version3` (libx264, libx265) and is licensed under the
+  **GNU GPL v3.0**. Source: <https://ffmpeg.org/download.html> and the build
+  scripts at <https://github.com/imageio/imageio-binaries>.
+- **Bundled Python runtime and libraries** (Windows `.exe` only, built with
+  PyInstaller, whose bootloader is GPL with an exception for bundled programs):
+  CPython (PSF License), aiohttp and requests (Apache 2.0), pycryptodome
+  (BSD / public domain), imageio-ffmpeg (BSD-2-Clause).
 - **Lucide icons** (`web/themes/default/lib/icons.css`) — ISC License, part of
   the icons MIT (Feather). Full text: `web/themes/default/lib/LICENSE-lucide.txt`.
 - **Pickr 1.9.1** (`web/themes/default/lib/pickr.min.js`, `pickr-nano.min.css`)

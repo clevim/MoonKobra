@@ -83,3 +83,28 @@ jobs:
           name: MoonKobra ${{ steps.ver.outputs.tag }}
           body_path: RELEASE_NOTES.md
           generate_release_notes: true
+
+  windows-exe:
+    # Single moonkobra.exe for people without Docker: download, double-click, the
+    # browser opens on the dashboard. Attached to the release created above.
+    needs: release
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build
+        shell: bash
+        run: |
+          pip install -r requirements.txt pyinstaller pillow
+          pyinstaller moonkobra.spec
+          RAW="${{ github.event.inputs.tag || github.ref_name }}"
+          mv dist/moonkobra.exe "dist/MoonKobra-v$(printf '%s' "$RAW" | sed -E 's/^[^0-9]*//')-windows.exe"
+      - name: Attach to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          files: dist/MoonKobra-*-windows.exe

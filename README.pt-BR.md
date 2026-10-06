@@ -114,7 +114,18 @@ esperando filamento, terminou ou dormindo quando a impressora está desligada.
 Tela da impressora → Configurações → Ativar modo LAN.
 
 **2. Inicie o MoonKobra.**
-Ainda não há imagem publicada, então o Docker constrói a partir desta pasta:
+
+*No Windows (o jeito mais fácil, sem instalar nada):*
+1. Baixe o `MoonKobra-…-windows.exe` da [última versão](https://github.com/clevim/MoonKobra/releases/latest).
+2. Coloque numa pasta só dele, por exemplo `Documentos\MoonKobra`. As
+   configurações e os arquivos ficam nessa pasta, ao lado do `.exe`.
+3. Dê dois cliques. Se o Windows mostrar *"O Windows protegeu o computador"*,
+   clique em **Mais informações → Executar assim mesmo**. Se o firewall
+   perguntar, marque **Redes privadas** e clique em **Permitir**.
+4. O navegador abre sozinho no painel. A janela preta é o MoonKobra rodando:
+   **fechar essa janela desliga tudo**. Para abrir de novo, dois cliques no `.exe`.
+
+*Com Docker (Linux, NAS, servidor):* o Docker constrói a partir desta pasta:
 
 ```bash
 git clone https://github.com/clevim/MoonKobra.git
@@ -127,7 +138,8 @@ cd MoonKobra
 O primeiro login é `kx` / `kx123`, e ele pede uma senha nova na hora.
 
 **4. Adicione a impressora.**
-Em *Impressoras*, clique em *Adicionar impressora* e digite o IP dela.
+Na primeira vez, o painel pergunta só o IP da impressora e o idioma. Depois,
+mais impressoras entram por *Impressoras → Adicionar impressora*.
 Usuário, senha, ID do dispositivo e o certificado TLS da própria impressora são
 lidos dela automaticamente. O certificado fica salvo em `config/certs/`; apague
 essa pasta para buscar de novo.
@@ -136,6 +148,8 @@ essa pasta para buscar de novo.
 Impressora → Conexão → tipo **Moonraker**, host `http://IP-DO-HOST:7125` (com
 `http://` e a porta). Cole a chave de *Configurações → API* no campo de chave
 de API.
+O painel mostra esse passo a passo com os seus dados já preenchidos (e em
+*Configurações → API → Como conectar o OrcaSlicer*).
 
 > Mais de uma impressora? Adicione do mesmo jeito: cada uma ganha a própria
 > porta (7125, 7126, …).

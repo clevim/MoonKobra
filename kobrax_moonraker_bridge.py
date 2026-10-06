@@ -5967,6 +5967,7 @@ class KobraXBridge:
         return web.json_response({
             "printer_name":     self._state.get("printer_name", ""),
             "printer_ip":       self._args.printer_ip,
+            "lan_ip":           getattr(self, "_local_ip", "") or "",
             "mqtt_port":        self._args.mqtt_port,
             "username":         self._args.username,
             "password":         self._args.password,
@@ -6403,10 +6404,14 @@ class KobraXBridge:
 
         # Windows: os.execv is broken there (new PID, the old process returns) -> subprocess
         cmd = ([sys.executable] + sys.argv[1:]) if frozen else ([sys.executable] + sys.argv)
+        # New visible console (closing it stops the bridge, like the first one); the
+        # onefile child must unpack its own _MEI dir, the parent's is deleted on exit.
+        env = dict(os.environ, PYINSTALLER_RESET_ENVIRONMENT="1", MOONKOBRA_NO_BROWSER="1")
         try:
-            subprocess.Popen(cmd, cwd=os.getcwd(),
-                             creationflags=(subprocess.DETACHED_PROCESS
-                                            | subprocess.CREATE_NEW_PROCESS_GROUP))
+            subprocess.Popen(cmd, cwd=os.getcwd(), env=env,
+                             creationflags=(subprocess.CREATE_NEW_CONSOLE
+                                            | subprocess.CREATE_NEW_PROCESS_GROUP
+                                            | subprocess.CREATE_BREAKAWAY_FROM_JOB))
         except Exception as e:
             log.error(f"Restart failed: {e} - restart the bridge manually")
         os._exit(0)
@@ -7058,6 +7063,8 @@ def _load_auth_config(args) -> None:
         cfg.set("auth", "user", auth.DEFAULT_USER)
         cfg.set("auth", "password", auth.hash_password(auth.DEFAULT_PASSWORD))
         cfg.set("auth", "must_change", "1")
+        # OrcaSlicer needs a key to get past the login; the first-run guide shows it
+        cfg.set("auth", "api_key", _new_camera_token())
         try:
             path.parent.mkdir(parents=True, exist_ok=True)
             with open(path, "w", encoding="utf-8") as f:
@@ -7369,6 +7376,12 @@ async def run_bridge(args):
         log.info(f"OrcaSlicer → Klipper → http://{_local_ip}:{ports}")
     log.info("Press Ctrl-C to stop")
 
+    # Windows .exe: double-click should land on the dashboard (not again after a restart)
+    if sys.platform == "win32" and getattr(sys, "frozen", False) and not os.environ.get("MOONKOBRA_NO_BROWSER"):
+        log.info("Close this window to stop MoonKobra")
+        import webbrowser
+        webbrowser.open(f"http://localhost:{args.port}")
+
     try:
         while True:
             await asyncio.sleep(3600)
@@ -7474,8 +7487,67 @@ def main():
     # Windows needs the ProactorEventLoop for asyncio.create_subprocess_exec
     if sys.platform == "win32":
         asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+        _kill_children_with_us()
 
-    asyncio.run(run_bridge(args))
+    if not (sys.platform == "win32" and getattr(sys, "frozen", False)):
+        asyncio.run(run_bridge(args))
+        return
+
+    # Windows .exe, run by double-click: the console window *is* the program.
+    import ctypes
+    k32 = ctypes.windll.kernel32
+    k32.SetConsoleTitleW("MoonKobra")
+    # QuickEdit: a click inside the window would freeze the whole bridge until a key press
+    h, mode = k32.GetStdHandle(-10), ctypes.c_uint32()
+    if k32.GetConsoleMode(h, ctypes.byref(mode)):
+        k32.SetConsoleMode(h, (mode.value & ~0x0040) | 0x0080)  # -QUICK_EDIT, +EXTENDED_FLAGS
+    # Second double-click while it is already running: just show the dashboard
+    with socket.socket() as s:
+        s.settimeout(0.5)
+        if s.connect_ex(("127.0.0.1", args.port)) == 0:
+            import webbrowser
+            webbrowser.open(f"http://localhost:{args.port}")
+            return
+    try:
+        asyncio.run(run_bridge(args))
+    except KeyboardInterrupt:
+        pass
+    except Exception:
+        log.exception("MoonKobra stopped with an error")
+        input("Press Enter to close this window...")  # otherwise the error vanishes with it
+
+
+def _kill_children_with_us():
+    """Windows: puts this process in a Job Object that kills every child (ffmpeg)
+    as soon as we die - window closed, crash or Task Manager - so nothing keeps
+    running in the background. The self-restart breaks away (CREATE_BREAKAWAY_FROM_JOB)."""
+    import ctypes
+    from ctypes import wintypes
+    k32 = ctypes.WinDLL("kernel32", use_last_error=True)
+
+    class _Basic(ctypes.Structure):
+        _fields_ = [("PerProcessUserTimeLimit", ctypes.c_int64), ("PerJobUserTimeLimit", ctypes.c_int64),
+                    ("LimitFlags", wintypes.DWORD), ("MinimumWorkingSetSize", ctypes.c_size_t),
+                    ("MaximumWorkingSetSize", ctypes.c_size_t), ("ActiveProcessLimit", wintypes.DWORD),
+                    ("Affinity", ctypes.c_size_t), ("PriorityClass", wintypes.DWORD),
+                    ("SchedulingClass", wintypes.DWORD)]
+
+    class _Extended(ctypes.Structure):
+        _fields_ = [("BasicLimitInformation", _Basic), ("IoInfo", ctypes.c_uint64 * 6),
+                    ("ProcessMemoryLimit", ctypes.c_size_t), ("JobMemoryLimit", ctypes.c_size_t),
+                    ("PeakProcessMemoryUsed", ctypes.c_size_t), ("PeakJobMemoryUsed", ctypes.c_size_t)]
+
+    KILL_ON_JOB_CLOSE, BREAKAWAY_OK, EXTENDED_LIMIT_INFO = 0x2000, 0x800, 9
+    k32.CreateJobObjectW.restype = wintypes.HANDLE
+    k32.GetCurrentProcess.restype = wintypes.HANDLE
+    job = k32.CreateJobObjectW(None, None)
+    info = _Extended()
+    info.BasicLimitInformation.LimitFlags = KILL_ON_JOB_CLOSE | BREAKAWAY_OK
+    ok = job and k32.SetInformationJobObject(wintypes.HANDLE(job), EXTENDED_LIMIT_INFO,
+                                             ctypes.byref(info), ctypes.sizeof(info))
+    if not ok or not k32.AssignProcessToJobObject(wintypes.HANDLE(job), k32.GetCurrentProcess()):
+        log.warning("Could not create the Windows job object - ffmpeg may outlive the bridge")
+    # ponytail: the handle stays open on purpose; Windows closes it (and kills the job) when we exit
 
 
 if __name__ == "__main__":

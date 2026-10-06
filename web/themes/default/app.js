@@ -319,7 +319,60 @@ function initPrinters(){
     var idx=window._printerIndex||1;
     _activePrinter=_printers.find(function(p){return String(p.id)===String(idx)})||_printers[0]||null;
     renderPrinterDropdown();
+    if(!_printers.length)openSetup();else maybeShowOrcaGuide();
   }).catch(function(){});
+}
+
+// ── First run: no printer configured yet -> ask only for the IP and the language ──
+function openSetup(){
+  document.getElementById('setup-lang').value=currentLang||_resolveInitialLanguage();
+  document.getElementById('setup-dialog').classList.add('open');
+  setTimeout(function(){document.getElementById('setup-ip').focus();},50);
+}
+function confirmSetup(){
+  var ip=document.getElementById('setup-ip').value.trim();
+  var st=document.getElementById('setup-status'),btn=document.getElementById('setup-confirm');
+  function say(key,fb,color){st.textContent=tr(key,fb);st.style.color=color||'var(--ink-2)';}
+  if(!/^\d{1,3}(\.\d{1,3}){3}$/.test(ip)){say('setup_err_ip','Digite o IP no formato 192.168.1.100.','var(--err)');return;}
+  btn.disabled=true;say('setup_wait','Procurando a impressora…');
+  fetch('/kx/printers/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({printer_ip:ip})})
+    .then(function(r){
+      if(!r.ok)throw 0;
+      say('setup_restart','Achei! Reiniciando o MoonKobra…','var(--ok)');
+      // The bridge restarts to load the new printer: wait until it answers again
+      var t0=Date.now();
+      (function poll(){
+        setTimeout(function(){
+          fetch('/kx/printers',{cache:'no-store'}).then(function(r){return r.json();})
+            .then(function(d){if((d.result||[]).length)location.href='/printer1';else throw 0;})
+            .catch(function(){if(Date.now()-t0<90000)poll();else location.reload();});
+        },1500);
+      })();
+    })
+    .catch(function(){btn.disabled=false;say('setup_err','Não encontrei a impressora nesse IP. Confira o número e se o modo LAN está ligado.','var(--err)');});
+}
+
+// ── How to fill OrcaSlicer's "Physical Printer" window, until "don't show again" ──
+function maybeShowOrcaGuide(force){
+  var hidden=false;try{hidden=localStorage.getItem('orcaGuideHide')==='1';}catch(e){}
+  if(hidden&&!force)return;
+  fetch(_apiUrl('/api/settings')).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(d){
+    var rel=_apiUrl('');var base=/^https?:/.test(rel)?rel.replace(/\/+$/,''):location.origin;
+    // OrcaSlicer may run on another PC: never hand it "localhost"
+    if(d.lan_ip)base=base.replace(/\/\/(localhost|127\.0\.0\.1)(?=[:/]|$)/,'//'+d.lan_ip);
+    document.getElementById('og-host').value=base;
+    var key=d.auth_enabled?(d.auth_api_key||''):'';
+    var ki=document.getElementById('og-key');
+    ki.value=key;ki.placeholder=tr('og_key_missing','gere uma em Configurações → API');
+    document.getElementById('og-key-row').style.display=d.auth_enabled?'':'none';
+    document.getElementById('og-key-empty').style.display=d.auth_enabled?'none':'';
+    document.getElementById('og-never').checked=hidden;
+    document.getElementById('orca-guide').classList.add('open');
+  }).catch(function(){});
+}
+function closeOrcaGuide(){
+  try{localStorage.setItem('orcaGuideHide',document.getElementById('og-never').checked?'1':'0');}catch(e){}
+  document.getElementById('orca-guide').classList.remove('open');
 }
 
 // ── Power button in the header (Issue: hard to find + barely visible on the

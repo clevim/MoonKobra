@@ -767,6 +767,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               <div id="api-login-off" class="hint" style="color:var(--warn)"></div>
               <div id="api-status" style="font-size:13px;margin:6px 0"></div>
               <button class="btn btn-sm btn-accent" type="button" data-icon="save" onclick="saveAuth('api-status')" id="btn-api-save"><span id="lbl-api-save">Salvar chave e reiniciar</span></button>
+              <button class="btn btn-sm btn-ghost" type="button" data-icon="monitor" onclick="maybeShowOrcaGuide(true)"><span data-t="og_open">Como conectar o OrcaSlicer</span></button>
             </div>
             <div class="card">
               <div class="card-title" data-icon="file-code"><span id="lbl-api-guide-title">Guia rápido da API</span></div>
@@ -918,6 +919,62 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <div class="modal-actions">
       <button id="apd-cancel" class="btn btn-ghost" onclick="closeAddPrinterDialog()">Cancelar</button>
       <button id="apd-confirm" class="btn btn-accent" data-icon="plus" onclick="confirmAddPrinter()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Primeira execução: nenhuma impressora ainda (só IP + idioma) -->
+<div class="modal-overlay" id="setup-dialog">
+  <div class="modal-box setup-box" style="max-width:440px">
+    <div class="setup-hello">
+      <div class="moko-card" role="img" aria-label="Moko" style="--moko-l:url(/kx/ui/lib/moko/ok-l.png?v=__UI_ASSETS_VER__);--moko-a:url(/kx/ui/lib/moko/ok-a.png?v=__UI_ASSETS_VER__)"><i class="moko-l"></i><i class="moko-a"></i></div>
+      <div>
+        <div class="plate" data-t="setup_plate">Primeira configuração</div>
+        <h2 class="setup-title" data-t="setup_title">Vamos achar a sua Kobra X</h2>
+      </div>
+    </div>
+    <div class="modal-field"><label for="setup-lang" data-t="setup_lang">Idioma</label>
+      <select id="setup-lang" onchange="setLanguage(this.value)">
+        <option value="pt-br">Português (BR)</option>
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="it">Italiano</option>
+        <option value="zh-cn">中文(简体)</option>
+      </select></div>
+    <div class="modal-field"><label for="setup-ip" data-t="setup_ip">IP da impressora na sua rede</label>
+      <input type="text" id="setup-ip" inputmode="decimal" placeholder="192.168.1.100" autocomplete="off" onkeydown="if(event.key==='Enter')confirmSetup()">
+      <small class="muted" data-t="setup_ip_hint">Ative o modo LAN na tela da impressora (Configurações → Modo LAN). O IP aparece nas informações de rede dela.</small></div>
+    <div id="setup-status" class="muted" role="status" style="font-size:13px;min-height:18px"></div>
+    <div class="modal-actions">
+      <button id="setup-confirm" class="btn btn-accent" data-icon="plug" onclick="confirmSetup()"><span data-t="setup_go">Conectar</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- Como preencher a impressora física no OrcaSlicer -->
+<div class="modal-overlay" id="orca-guide" onclick="if(event.target===this)closeOrcaGuide()">
+  <div class="modal-box" style="max-width:520px">
+    <div class="modal-header">
+      <span class="modal-title" data-icon="monitor"><span data-t="og_title">Conectar o OrcaSlicer</span></span>
+      <button class="modal-close" data-icon="x" onclick="closeOrcaGuide()" aria-label="Fechar"></button>
+    </div>
+    <p class="hint" data-t="og_step1">No OrcaSlicer, aba Preparar: clique no ícone de conexão (Wi-Fi) ao lado da impressora. Abre a janela abaixo; preencha só o que está marcado.</p>
+    <div class="og-win" aria-label="Physical Printer">
+      <div class="og-bar">Physical Printer</div>
+      <div class="og-row"><span class="og-lbl">Host Type</span><span class="og-val og-fill"><b class="og-n">1</b>Moonraker (Klipper)</span></div>
+      <div class="og-row"><span class="og-lbl">Printer Agent</span><span class="og-val og-skip" data-t="og_keep">deixe como está</span></div>
+      <div class="og-row"><span class="og-lbl">Hostname, IP or URL</span><span class="og-val og-fill"><b class="og-n">2</b><input type="text" id="og-host" readonly onclick="this.select()"><button class="icon-btn" data-icon="copy" onclick="copyCamUrl('og-host')" title="Copiar"></button></span></div>
+      <div class="og-row"><span class="og-lbl">Device UI</span><span class="og-val og-skip" data-t="og_empty">deixe vazio</span></div>
+      <div class="og-row"><span class="og-lbl">API Key / Password</span><span class="og-val og-fill" id="og-key-row"><b class="og-n">3</b><input type="text" id="og-key" readonly onclick="this.select()"><button class="icon-btn" data-icon="copy" onclick="copyCamUrl('og-key')" title="Copiar"></button></span><span class="og-val og-skip" id="og-key-empty" data-t="og_empty" style="display:none">deixe vazio</span></div>
+      <div class="og-row"><span class="og-lbl">HTTPS CA File</span><span class="og-val og-skip" data-t="og_empty">deixe vazio</span></div>
+      <div class="og-foot"><span class="og-btn"><b class="og-n">4</b>Test</span><span class="og-btn">OK</span></div>
+    </div>
+    <p class="hint" data-t="og_step2">Clique em Test: deve aparecer que a conexão com o Moonraker funciona. Depois OK. A aba Dispositivo do OrcaSlicer passa a mostrar este painel.</p>
+    <div class="modal-actions" style="justify-content:space-between;align-items:center">
+      <label class="og-never"><input type="checkbox" id="og-never"> <span data-t="og_never">Não mostrar novamente</span></label>
+      <button class="btn btn-accent" onclick="closeOrcaGuide()"><span data-t="og_ok">Entendi</span></button>
     </div>
   </div>
 </div>
