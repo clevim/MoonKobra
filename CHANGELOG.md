@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.1.0] – MoonKobra
+
+### Added
+- **Windows `.exe`**: every release now ships `MoonKobra-vX.Y.Z-windows.exe`
+  next to the Docker image. Download, double-click, and the browser opens on
+  the dashboard - no Docker, no Python. The black console window *is* the
+  program: closing it stops everything, including the camera's ffmpeg
+  (Windows Job Object), even after a crash or a kill from Task Manager.
+  Double-clicking it again while it runs just opens the dashboard; a click
+  inside the window no longer freezes the bridge (QuickEdit off); on a crash
+  the window waits for Enter so the error can be read.
+- **First-run setup**: with no printer configured, the dashboard asks only for
+  the printer's IP and the language, fetches the credentials from the printer,
+  restarts and comes back on its own.
+- **OrcaSlicer guide**: a replica of OrcaSlicer's *Physical Printer* window
+  with the host URL and API key filled in and copy buttons. Shown on the
+  dashboard until "Don't show again"; reopen it under *Settings → API*.
+- New installs get an API key with the default login, so OrcaSlicer gets past
+  the login out of the box. `/api/settings` now reports the host's `lan_ip`.
+
+### Fixed
+- Windows restart after saving settings no longer leaves the bridge running
+  hidden in the background: it reopens in a visible console, and the onefile
+  binary unpacks fresh instead of reusing the parent's deleted temp folder.
+- The single binary now bundles ffmpeg (camera stream did not work in it).
+
+### Changed
+- `NOTICE.md` lists the bundled FFmpeg (GPLv3) and the Python runtime and
+  libraries inside the `.exe`. The Anycubic certificate is still never shipped:
+  the bridge uses the one the printer hands over in its LAN handshake.
+
 ## [1.0.0] – MoonKobra
 
 ### Added
