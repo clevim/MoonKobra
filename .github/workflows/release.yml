@@ -99,7 +99,7 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          pip install -r requirements.txt pyinstaller pillow
+          pip install -r requirements.txt pyinstaller pillow pystray
           pyinstaller moonkobra.spec
           RAW="${{ github.event.inputs.tag || github.ref_name }}"
           mv dist/moonkobra.exe "dist/MoonKobra-v$(printf '%s' "$RAW" | sed -E 's/^[^0-9]*//')-windows.exe"

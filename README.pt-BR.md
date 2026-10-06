@@ -122,8 +122,9 @@ Tela da impressora → Configurações → Ativar modo LAN.
 3. Dê dois cliques. Se o Windows mostrar *"O Windows protegeu o computador"*,
    clique em **Mais informações → Executar assim mesmo**. Se o firewall
    perguntar, marque **Redes privadas** e clique em **Permitir**.
-4. O navegador abre sozinho no painel. A janela preta é o MoonKobra rodando:
-   **fechar essa janela desliga tudo**. Para abrir de novo, dois cliques no `.exe`.
+4. O navegador abre sozinho no painel. O MoonKobra fica rodando como um ícone na
+   bandeja, ao lado do relógio: um clique nele abre o painel, botão direito →
+   **Sair** desliga. Bolinha verde no ícone = impressora conectada; vermelha = não. O log fica em `moonkobra.log`, ao lado do `.exe`.
 
 *Com Docker (Linux, NAS, servidor):* o Docker constrói a partir desta pasta:
 

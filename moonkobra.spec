@@ -12,7 +12,7 @@ from PyInstaller.utils.hooks import collect_all
 # Nunca embutir anycubic_slicer.crt/.key: são da Anycubic e não são distribuídos (NOTICE.md).
 datas = [("web", "web"), ("data/orca_filaments.json", "static"), ("VERSION", "."), ("LICENSE", "."), ("NOTICE.md", ".")]
 binaries = []
-hiddenimports = []
+hiddenimports = ["pystray._win32"] if sys.platform == "win32" else []
 
 # pycryptodome inteiro (criptografia da autenticação com a impressora) e o
 # binário do ffmpeg que o imageio_ffmpeg traz (stream da câmera)
@@ -46,7 +46,8 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=False,
-    console=True,
+    # Windows: no console window, MoonKobra lives in the tray (pystray)
+    console=sys.platform != "win32",
     # PNG → .ico convertido pelo PyInstaller (precisa do Pillow); só faz sentido no Windows
     icon="web/themes/default/lib/icon/icon-512.png" if sys.platform == "win32" else None,
     onefile=True,

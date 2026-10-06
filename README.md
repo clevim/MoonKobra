@@ -116,9 +116,10 @@ Printer screen → Settings → Enable LAN mode.
 3. Double-click it. If Windows shows *"Windows protected your PC"*, click
    **More info → Run anyway**. If the firewall asks, tick **Private networks**
    and click **Allow**.
-4. The browser opens on the dashboard by itself. The black window is MoonKobra
-   running: **closing that window stops everything**. To start it again,
-   double-click the `.exe`.
+4. The browser opens on the dashboard by itself. MoonKobra keeps running as an
+   icon in the tray, next to the clock: click it to open the dashboard,
+   right-click → **Quit** to stop it. A green dot on the icon means the printer is
+   connected, red means it is not. The log is in `moonkobra.log`, next to the `.exe`.
 
 *With Docker (Linux, NAS, server):* Docker builds it from this folder:
 

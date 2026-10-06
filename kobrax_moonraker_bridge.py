@@ -62,6 +62,10 @@ sys.path.insert(0, _BASE)
 # The read-only web assets (themes) are embedded in the onefile binary via --add-data and
 # extracted to sys._MEIPASS; in script/Docker mode they sit next to this file.
 _WEB_BASE = getattr(sys, "_MEIPASS", _BASE)
+# Windows: console children (ffmpeg) would pop up their own black window without this
+_NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
+_tray = None  # Windows .exe tray icon (pystray), hidden before the process exits
+_running_bridges: dict = {}  # printer_id -> bridge of the running run_bridge(), read by the tray
 from kobrax_client import KobraXClient
 
 
@@ -1084,6 +1088,7 @@ class CameraCache:
                     "-f", "mpegts", "pipe:1",
                     stdout=asyncio.subprocess.PIPE,
                     stderr=asyncio.subprocess.PIPE,
+                    creationflags=_NO_WINDOW,
                 )
                 self._proc_h264 = proc
             except Exception as e:
@@ -1160,6 +1165,7 @@ class CameraCache:
                     "-flush_packets", "1", "pipe:1",
                     stdout=asyncio.subprocess.PIPE,
                     stderr=asyncio.subprocess.PIPE,
+                    creationflags=_NO_WINDOW,
                 )
                 self._proc_mjpeg = proc
             except Exception as e:
@@ -6404,16 +6410,19 @@ class KobraXBridge:
 
         # Windows: os.execv is broken there (new PID, the old process returns) -> subprocess
         cmd = ([sys.executable] + sys.argv[1:]) if frozen else ([sys.executable] + sys.argv)
-        # New visible console (closing it stops the bridge, like the first one); the
-        # onefile child must unpack its own _MEI dir, the parent's is deleted on exit.
+        # Script: new visible console, like the first one. The .exe lives in the tray and
+        # has no console. The onefile child must unpack its own _MEI dir, the parent's is
+        # deleted on exit.
         env = dict(os.environ, PYINSTALLER_RESET_ENVIRONMENT="1", MOONKOBRA_NO_BROWSER="1")
         try:
             subprocess.Popen(cmd, cwd=os.getcwd(), env=env,
-                             creationflags=(subprocess.CREATE_NEW_CONSOLE
+                             creationflags=((0 if frozen else subprocess.CREATE_NEW_CONSOLE)
                                             | subprocess.CREATE_NEW_PROCESS_GROUP
                                             | subprocess.CREATE_BREAKAWAY_FROM_JOB))
         except Exception as e:
             log.error(f"Restart failed: {e} - restart the bridge manually")
+        if _tray:
+            _tray.visible = False  # otherwise a dead icon stays in the tray until hovered
         os._exit(0)
 
     # ─── Version ──────────────────────────────────────────────────────────────
@@ -7294,7 +7303,9 @@ async def run_bridge(args):
     store = GCodeStore(args.data_dir)
     _finder = getattr(env_loader, "find_config_path", None)
     cert_dir = str((_finder() if _finder else pathlib.Path(_BASE) / "config" / "config.ini").parent / "certs")
+    global _running_bridges
     all_bridges: dict = {}
+    _running_bridges = all_bridges
     runners = []
     stop_event = threading.Event()
     loop = asyncio.get_event_loop()
@@ -7374,11 +7385,13 @@ async def run_bridge(args):
         log.info("Running in Docker — set BRIDGE_HOST_IP to show the exact address")
     else:
         log.info(f"OrcaSlicer → Klipper → http://{_local_ip}:{ports}")
-    log.info("Press Ctrl-C to stop")
+    if sys.platform == "win32" and getattr(sys, "frozen", False):
+        log.info("MoonKobra runs in the tray (next to the clock): right-click the icon to quit")
+    else:
+        log.info("Press Ctrl-C to stop")
 
     # Windows .exe: double-click should land on the dashboard (not again after a restart)
     if sys.platform == "win32" and getattr(sys, "frozen", False) and not os.environ.get("MOONKOBRA_NO_BROWSER"):
-        log.info("Close this window to stop MoonKobra")
         import webbrowser
         webbrowser.open(f"http://localhost:{args.port}")
 
@@ -7493,28 +7506,93 @@ def main():
         asyncio.run(run_bridge(args))
         return
 
-    # Windows .exe, run by double-click: the console window *is* the program.
+    _run_windows_tray(args)
+
+
+def _run_windows_tray(args):
+    """Windows .exe (built without a console): the bridge runs in a thread and the
+    tray icon is the program - a click opens the dashboard, right-click -> Quit stops it.
+    A green/red sphere on the icon shows whether the printers are connected."""
     import ctypes
-    k32 = ctypes.windll.kernel32
-    k32.SetConsoleTitleW("MoonKobra")
-    # QuickEdit: a click inside the window would freeze the whole bridge until a key press
-    h, mode = k32.GetStdHandle(-10), ctypes.c_uint32()
-    if k32.GetConsoleMode(h, ctypes.byref(mode)):
-        k32.SetConsoleMode(h, (mode.value & ~0x0040) | 0x0080)  # -QUICK_EDIT, +EXTENDED_FLAGS
-    # Second double-click while it is already running: just show the dashboard
-    with socket.socket() as s:
-        s.settimeout(0.5)
-        if s.connect_ex(("127.0.0.1", args.port)) == 0:
-            import webbrowser
-            webbrowser.open(f"http://localhost:{args.port}")
-            return
-    try:
-        asyncio.run(run_bridge(args))
-    except KeyboardInterrupt:
-        pass
-    except Exception:
-        log.exception("MoonKobra stopped with an error")
-        input("Press Enter to close this window...")  # otherwise the error vanishes with it
+    import webbrowser
+    import pystray
+    from PIL import Image
+    global _tray
+
+    # No console: the log goes to a file next to the .exe (the dashboard also shows it)
+    fh = logging.FileHandler(os.path.join(_BASE, "moonkobra.log"), mode="w", encoding="utf-8")
+    fh.setFormatter(logging.Formatter("[%(asctime)s] %(levelname)-5s %(name)s: %(message)s", "%H:%M:%S"))
+    logging.getLogger().addHandler(fh)
+
+    url = f"http://localhost:{args.port}"
+    # Second double-click while it is already running: just show the dashboard.
+    # Not on a self-restart: the old process may still hold the port for a moment.
+    if not os.environ.get("MOONKOBRA_NO_BROWSER"):
+        with socket.socket() as s:
+            s.settimeout(0.5)
+            if s.connect_ex(("127.0.0.1", args.port)) == 0:
+                webbrowser.open(url)
+                return
+
+    pt = (ctypes.windll.kernel32.GetUserDefaultUILanguage() & 0x3FF) == 0x16  # LANG_PORTUGUESE
+    t = (lambda p, e: p) if pt else (lambda p, e: e)
+
+    base = Image.open(os.path.join(_WEB_BASE, "web", "themes", "default", "lib", "icon", "favicon-64.png")).convert("RGBA")
+
+    def icon_with_dot(color):
+        # Moko + a small status sphere in the bottom-right corner
+        from PIL import ImageDraw
+        img = base.copy()
+        ImageDraw.Draw(img).ellipse((38, 38, 62, 62), fill=color, outline=(20, 20, 20, 255), width=3)
+        return img
+
+    icons = {True: icon_with_dot((46, 204, 64, 255)), False: icon_with_dot((231, 60, 50, 255))}
+
+    def watch_printers():
+        last = None
+        while True:
+            clients = [b.client for b in list(_running_bridges.values())]
+            ok = sum(1 for c in clients if c.is_connected())
+            state = (bool(clients) and ok == len(clients), ok, len(clients))
+            if state != last:
+                last = state
+                _tray.icon = icons[state[0]]
+                _tray.title = (f"MoonKobra - {url}\n"
+                               + (t(f"{ok}/{len(clients)} impressora(s) conectada(s)", f"{ok}/{len(clients)} printer(s) connected")
+                                  if clients else t("Nenhuma impressora configurada", "No printer configured")))
+            time.sleep(3)
+
+    def bridge():
+        try:
+            asyncio.run(run_bridge(args))
+        except Exception as e:
+            log.exception("MoonKobra stopped with an error")
+            ctypes.windll.user32.MessageBoxW(
+                None,
+                t(f"O MoonKobra parou com um erro:\n\n{e}\n\nDetalhes em moonkobra.log, na pasta do programa.",
+                  f"MoonKobra stopped with an error:\n\n{e}\n\nDetails in moonkobra.log, in the program folder."),
+                "MoonKobra", 0x10)  # MB_ICONERROR
+        _tray.stop()
+
+    def quit_(icon):
+        icon.visible = False
+        os._exit(0)  # same as closing the old console window; the job object takes ffmpeg along
+
+    _tray = pystray.Icon(
+        "MoonKobra",
+        icons[False],
+        f"MoonKobra - {url}",
+        menu=pystray.Menu(
+            pystray.MenuItem(t("Abrir painel", "Open dashboard"), lambda: webbrowser.open(url), default=True),
+            pystray.MenuItem(t("Abrir pasta do MoonKobra", "Open MoonKobra folder"), lambda: os.startfile(_BASE)),
+            pystray.Menu.SEPARATOR,
+            pystray.MenuItem(t("Sair", "Quit"), quit_),
+        ),
+    )
+    threading.Thread(target=bridge, daemon=True).start()
+    _tray.run(setup=lambda icon: (setattr(icon, "visible", True),
+                                  threading.Thread(target=watch_printers, daemon=True).start()))
+    os._exit(0)
 
 
 def _kill_children_with_us():
@@ -7545,7 +7623,8 @@ def _kill_children_with_us():
     info.BasicLimitInformation.LimitFlags = KILL_ON_JOB_CLOSE | BREAKAWAY_OK
     ok = job and k32.SetInformationJobObject(wintypes.HANDLE(job), EXTENDED_LIMIT_INFO,
                                              ctypes.byref(info), ctypes.sizeof(info))
-    if not ok or not k32.AssignProcessToJobObject(wintypes.HANDLE(job), k32.GetCurrentProcess()):
+    # GetCurrentProcess() is the pseudo-handle -1: as a bare int ctypes overflows on it
+    if not ok or not k32.AssignProcessToJobObject(wintypes.HANDLE(job), wintypes.HANDLE(k32.GetCurrentProcess())):
         log.warning("Could not create the Windows job object - ffmpeg may outlive the bridge")
     # ponytail: the handle stays open on purpose; Windows closes it (and kills the job) when we exit
 
